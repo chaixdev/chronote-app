@@ -9,13 +9,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import be.chaidev.chronote.ChronoteApp
 import be.chaidev.chronote.R
-import be.chaidev.chronote.data.TopicLocalDataSource
-import be.chaidev.chronote.model.Topic
+import be.chaidev.chronote.data.cache.entity.TopicEntity
 import be.chaidev.chronote.util.DateFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 
@@ -25,7 +22,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LogsFragment : Fragment() {
 
-    @Inject lateinit var topics: TopicLocalDataSource
     @Inject lateinit var dateFormatter: DateFormatter
 
     private lateinit var recyclerView: RecyclerView
@@ -53,13 +49,6 @@ class LogsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        topics.getAllTopics { topics ->
-            recyclerView.adapter =
-                TopicsViewAdapter(
-                    topics,
-                    dateFormatter
-                )
-        }
     }
 }
 
@@ -67,7 +56,7 @@ class LogsFragment : Fragment() {
  * RecyclerView adapter for the logs list.
  */
 private class TopicsViewAdapter(
-    private val topicDataSet: List<Topic>,
+    private val topicDataSet: List<TopicEntity>,
     private val daterFormatter: DateFormatter
 ) : RecyclerView.Adapter<TopicsViewAdapter.TopicsViewHolder>() {
 
@@ -87,6 +76,6 @@ private class TopicsViewAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TopicsViewHolder, position: Int) {
         val topic = topicDataSet[position]
-        holder.textView.text = "${topic.subjectTitle}\n\t${topic.dateModified}"
+        holder.textView.text = "${topic.title}\n\t${topic.dateModified}"
     }
 }
