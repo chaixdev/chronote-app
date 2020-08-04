@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Chronote</string>
+    <string name="buttons_welcome">Make timed notes</string>
+    <string name="button_1">new topic</string>
+    <string name="button_2">see all topics</string>
+    <string name="see_all_logs">SEE ALL TOPICS</string>
+    <string name="to_chronometer">chronometer</string>
+    <string name="delete_logs">Remove all topics</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
