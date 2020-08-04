@@ -14,15 +14,19 @@ import be.chaidev.chronote.R
 import be.chaidev.chronote.data.TopicLocalDataSource
 import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.util.DateFormatter
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 
 /**
  * Fragment that displays the database logs.
  */
+@AndroidEntryPoint
 class LogsFragment : Fragment() {
 
-    private lateinit var topics: TopicLocalDataSource
-    private lateinit var dateFormatter: DateFormatter
+    @Inject lateinit var topics: TopicLocalDataSource
+    @Inject lateinit var dateFormatter: DateFormatter
 
     private lateinit var recyclerView: RecyclerView
 
@@ -43,14 +47,8 @@ class LogsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        populateFields(context)
     }
 
-    private fun populateFields(context: Context) {
-        topics = (context.applicationContext as ChronoteApp).serviceLocator.topicLocalDataSourceLocalDataSource
-        dateFormatter = (context.applicationContext as ChronoteApp).serviceLocator.provideDateFormatter()
-    }
 
     override fun onResume() {
         super.onResume()

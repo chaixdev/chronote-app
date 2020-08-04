@@ -28,14 +28,17 @@ import be.chaidev.chronote.R
 import be.chaidev.chronote.data.TopicLocalDataSource
 import be.chaidev.chronote.navigation.AppNavigator
 import be.chaidev.chronote.navigation.Screens
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Fragment that displays buttons whose interactions are recorded.
  */
+@AndroidEntryPoint
 class ButtonsFragment : Fragment() {
 
-    private lateinit var logger: TopicLocalDataSource
-    private lateinit var navigator: AppNavigator
+    @Inject lateinit var logger: TopicLocalDataSource
+    @Inject lateinit var navigator: AppNavigator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,12 +51,6 @@ class ButtonsFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        populateFields(context)
-    }
-
-    private fun populateFields(context: Context) {
-        logger = (context.applicationContext as ChronoteApp).serviceLocator.topicLocalDataSourceLocalDataSource
-        navigator = (context.applicationContext as ChronoteApp).serviceLocator.provideNavigator(activity!!)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
