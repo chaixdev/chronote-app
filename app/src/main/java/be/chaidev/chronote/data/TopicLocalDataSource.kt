@@ -6,11 +6,14 @@ import be.chaidev.chronote.data.dao.TopicDao
 import be.chaidev.chronote.model.Topic
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Data manager class that handles data manipulation between the database and the UI.
  */
-class TopicLocalDataSource(private val topicDao: TopicDao) {
+@Singleton
+class TopicLocalDataSource @Inject constructor(private val topicDao: TopicDao) {
 
     private val executorService: ExecutorService = Executors.newFixedThreadPool(4)
     private val mainThreadHandler by lazy {
