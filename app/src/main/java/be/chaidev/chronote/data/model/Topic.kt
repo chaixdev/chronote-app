@@ -6,12 +6,10 @@ import androidx.room.PrimaryKey
 data class Topic(
 
     val id:String,
-    val title: String,
-    val duration: Long,
-    val tags: String,
-
-//    val notes: List<Note>,
+    val subject:Subject,
+    val tags: List<String>,
     val dateCreated: String,
     val dateModified: String
-//    val uri: String,
+
+//    val notes: List<Note>,
 )

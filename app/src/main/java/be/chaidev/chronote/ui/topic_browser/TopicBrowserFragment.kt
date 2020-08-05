@@ -7,6 +7,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.chaidev.chronote.R
 import be.chaidev.chronote.data.model.Topic
 import be.chaidev.chronote.util.DataState
@@ -21,14 +23,15 @@ class TopicBrowserFragment constructor(
 
 ) : Fragment(R.layout.topic_browser_fragment) {
 
-
     private val viewModel: TopicBrowserViewModel by viewModels()
+    private lateinit var listAdapter : TopicBrowserListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "topicbrowserfragment created with parameter ${parameter}")
 
         subscribeObservers()
+        setupUI()
         viewModel.setStateEvent(TopicStateEvent.GetTopicEvents)
     }
 
@@ -37,7 +40,7 @@ class TopicBrowserFragment constructor(
             when (dataState) {
                 is DataState.Success<List<Topic>> -> {
                     displayProgressBar(false)
-                    appendTopicTitles(dataState.data)
+                    populateList(dataState.data)
                 }
                 is DataState.Error -> {
                     displayProgressBar(false)
@@ -64,15 +67,25 @@ class TopicBrowserFragment constructor(
 
     }
 
-    private fun appendTopicTitles(topics: List<Topic>) {
-        val sb = StringBuilder()
-        for (topic in topics) {
-            sb.append(topic.title + "\n")
-        }
-        text.text = sb.toString()
+    private fun populateList(topics: List<Topic>) {
+        listAdapter.addData(topics)
+        listAdapter.notifyDataSetChanged()
     }
 
     companion object {
         private const val TAG = "TopicBrowserFragment"
     }
+
+    private fun setupUI() {
+        topicBrowserList.layoutManager = LinearLayoutManager(context)
+        listAdapter = TopicBrowserListAdapter(arrayListOf())
+        topicBrowserList.addItemDecoration(
+            DividerItemDecoration(
+                topicBrowserList.context,
+                (topicBrowserList.layoutManager as LinearLayoutManager).orientation
+            )
+        )
+        topicBrowserList.adapter = listAdapter
+    }
+
 }

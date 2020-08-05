@@ -7,12 +7,13 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "topics")
 data class TopicEntity(
     @PrimaryKey
-    val id:String,
-    val title: String,
-    val duration: Long,
+    val id: String,
+    val subjectTitle: String,
+    val subjectUri: String,
+    val subjectType: String,
+    val subjectDuration: Long,
     val tags: String,
-//    val notes: List<Note>,
     val dateCreated: String,
     val dateModified: String
-//    val uri: String,
+//    val notes: List<Note>,
 )

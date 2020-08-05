@@ -1,5 +1,6 @@
 package be.chaidev.chronote.data.network.dto
 
+import be.chaidev.chronote.data.model.Interval
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -8,20 +9,13 @@ data class NoteDto(
     @Expose
     val id: String,
 
-    @SerializedName("title")
-    @Expose
-    val title: String,
-
     @SerializedName("body")
     @Expose
     val body: String,
 
-    @SerializedName("start")
+    @SerializedName("interval")
     @Expose
-    val start: Long,
+    val interval: Interval
 
-    @SerializedName("end")
-    @Expose
-    val end: Long
-)
+    )
 
