@@ -12,6 +12,7 @@ android {
         applicationId "be.chaidev.chronote"
         minSdkVersion 22
         targetSdkVersion 30
+        compileSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -43,10 +44,8 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4"
 
     // Room
     implementation "androidx.room:room-runtime:2.2.5"
@@ -69,7 +68,6 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Hilt and viewmodels
-
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
     kapt "androidx.hilt:hilt-compiler:$hilt_viewmodels"
 
@@ -82,10 +80,19 @@ dependencies {
 
     // livedata
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-    implementation "androidx.fragment:fragment-ktx:$fragment_ktx"
 
     // fragment navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
 
+    // androidx
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx"
+    implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // material theme
+    implementation 'com.google.android.material:material:1.2.0'
 }

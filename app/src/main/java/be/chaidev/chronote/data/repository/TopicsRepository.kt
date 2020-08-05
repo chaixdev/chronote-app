@@ -10,7 +10,6 @@ import be.chaidev.chronote.util.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-
 class TopicsRepository constructor(
     private val topicDao: TopicDao,
     private val streamarksApi: StreamarksApi,
@@ -34,5 +33,4 @@ class TopicsRepository constructor(
             emit(DataState.Error(e))
         }
     }
-
 }

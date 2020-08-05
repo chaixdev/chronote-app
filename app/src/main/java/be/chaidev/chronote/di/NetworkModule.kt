@@ -1,6 +1,12 @@
 package be.chaidev.chronote.di
 
+import be.chaidev.chronote.data.model.Interval
+import be.chaidev.chronote.data.model.Subject
+import be.chaidev.chronote.data.network.dto.NoteDto
+import be.chaidev.chronote.data.network.retrofit.IntervalDeserializer
+import be.chaidev.chronote.data.network.retrofit.NoteDeserializer
 import be.chaidev.chronote.data.network.retrofit.StreamarksApi
+import be.chaidev.chronote.data.network.retrofit.SubjectDeserializer
 import be.chaidev.chronote.util.STREAMARKS_URL
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -19,6 +25,9 @@ object NetworkModule{
     @Provides
     fun provideGsonBuilder(): Gson {
         return GsonBuilder()
+            .registerTypeAdapter(NoteDto::class.java, NoteDeserializer())
+            .registerTypeAdapter(Interval::class.java, IntervalDeserializer())
+            .registerTypeAdapter(Subject::class.java, SubjectDeserializer())
             .excludeFieldsWithoutExposeAnnotation()
             .create()
 

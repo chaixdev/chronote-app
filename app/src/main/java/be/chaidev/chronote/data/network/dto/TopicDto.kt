@@ -1,5 +1,6 @@
 package be.chaidev.chronote.data.network.dto
 
+import be.chaidev.chronote.data.model.Subject
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -9,19 +10,13 @@ data class TopicDto(
     @Expose
     val id: String,
 
-    @SerializedName("title")
+    @SerializedName("subject")
     @Expose
-    val title: String,
-
-    @SerializedName("duration")
-    @Expose
-    val duration: Long,
+    val subject: Subject,
 
     @SerializedName("tags")
     @Expose
-    val tags: String,
-
-//    val notes: List<Note>,
+    val tags: List<String>,
 
     @SerializedName("dateCreated")
     @Expose
@@ -29,6 +24,11 @@ data class TopicDto(
 
     @SerializedName("dateModified")
     @Expose
-    val dateModified: String
+    val dateModified: String,
+
+
+    @SerializedName("notes")
+    @Expose
+    val notes: List<NoteDto>
 
 )

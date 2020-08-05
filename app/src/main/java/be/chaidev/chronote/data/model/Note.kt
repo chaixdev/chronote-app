@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 data class Note (
 
     val id: String,
-    val title: String,
     val body: String,
+    val interval: Interval,
     val start: Long,
     val end: Long
 )
