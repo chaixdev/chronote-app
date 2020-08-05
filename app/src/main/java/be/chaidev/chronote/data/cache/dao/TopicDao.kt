@@ -10,11 +10,11 @@ import be.chaidev.chronote.data.cache.entity.TopicEntity
 interface TopicDao {
 
     @Query("SELECT * FROM topics ORDER BY id DESC")
-    fun getAll(): List<TopicEntity>
+    suspend fun getAll(): List<TopicEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg topics: TopicEntity)
+    suspend fun insert( topics: TopicEntity)
 
     @Query("DELETE FROM topics")
-    fun nukeTable()
+    suspend fun nukeTable()
 }

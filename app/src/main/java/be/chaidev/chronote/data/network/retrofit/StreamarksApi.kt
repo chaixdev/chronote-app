@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface StreamarksApi {
 
-    @GET("topics")
+    @GET("topic/")
     suspend fun getTopics(): List<TopicDto>
 
 
