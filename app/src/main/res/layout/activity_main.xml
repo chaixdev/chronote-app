@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_fragment_container"
+    android:name="be.chaidev.chronote.navigation.MainNavHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/main_nav">
 
-    <androidx.fragment.app.FragmentContainerView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main_fragment_container"
-        android:name="be.chaidev.chronote.ui.MainNavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/main_nav">
-
-
-    </androidx.fragment.app.FragmentContainerView>
-</LinearLayout>
+</androidx.fragment.app.FragmentContainerView>
