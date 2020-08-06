@@ -2,11 +2,21 @@
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
     app:startDestination="@id/topicBrowserFragment">
 
     <fragment
         android:id="@+id/topicBrowserFragment"
         android:name="be.chaidev.chronote.ui.topic.TopicBrowserFragment"
-        android:label="TopicBrowserFragment" />
+        android:label="TopicBrowserFragment" >
+        <action
+            android:id="@+id/action_topicBrowserFragment_to_topicDetailFragment"
+            app:destination="@id/topicDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/topicDetailFragment"
+        android:name="be.chaidev.chronote.ui.topic.TopicDetailFragment"
+        android:label="topic_detail_fragment"
+        tools:layout="@layout/topic_detail_fragment" />
 </navigation>

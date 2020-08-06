@@ -30,7 +30,6 @@ class TopicBrowserFragment:
 
     private lateinit var recyclerAdapter : TopicBrowserListAdapter
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -90,7 +89,7 @@ class TopicBrowserFragment:
 
     override fun onItemSelected(position: Int, item: Topic) {
         viewModel.setTopic(item)
-        findNavController().navigate(R.id.action_topicBrowserListFragment_to_topicFragment)
+        findNavController().navigate(R.id.action_topicBrowserFragment_to_topicDetailFragment)
     }
 
     private  fun resetUI(){
