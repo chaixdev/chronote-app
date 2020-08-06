@@ -28,7 +28,7 @@ class TopicBrowserListAdapter(
                 Log.e(TAG, "onCreateViewHolder: No more results...")
                 return GenericViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.topic_browser_no_results,
+                        R.layout.topic_browser_item,
                         parent,
                         false
                     )
