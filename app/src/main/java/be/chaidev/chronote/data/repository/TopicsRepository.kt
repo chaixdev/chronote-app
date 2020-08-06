@@ -2,12 +2,10 @@ package be.chaidev.chronote.data.repository
 
 import android.util.Log
 import be.chaidev.chronote.data.cache.DataCache
-import be.chaidev.chronote.data.cache.entity.NoteEntity
-import be.chaidev.chronote.data.cache.entity.TopicEntity
 import be.chaidev.chronote.data.model.Topic
 import be.chaidev.chronote.data.network.dto.TopicDto
 import be.chaidev.chronote.data.network.retrofit.StreamarksApi
-import be.chaidev.chronote.util.DataState
+import be.chaidev.chronote.ui.mvi.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
