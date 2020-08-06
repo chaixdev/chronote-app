@@ -1,4 +1,4 @@
-package be.chaidev.chronote.ui.topic_browser
+package be.chaidev.chronote.ui.topic
 
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.chaidev.chronote.R
 import be.chaidev.chronote.data.model.Topic
-import be.chaidev.chronote.util.DataState
+import be.chaidev.chronote.ui.topic.state.TopicViewState
+import be.chaidev.chronote.ui.topic.viewmodel.TopicBrowserViewModel
+import be.chaidev.chronote.ui.mvi.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.topic_browser_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +35,7 @@ class TopicBrowserFragment constructor(
 
         subscribeObservers()
         setupUI()
-        viewModel.setStateEvent(TopicStateEvent.GetTopicEvents)
+        viewModel.setEvent(TopicViewState.LoadTopicsViewState())
     }
 
     private fun subscribeObservers() {
