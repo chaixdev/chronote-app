@@ -18,35 +18,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = "MainActivity"
-
-    @Inject
-    lateinit var fragmentFactory: MainFragmentFactory
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.MainTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        supportFragmentManager.fragmentFactory = fragmentFactory
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_fragment_container, TopicBrowserFragment::class.java, null)
-            .commit()
-
-        if (savedInstanceState == null) {
-//            navigator.navigateTo(Screens.BUTTONS)
-        }
     }
-
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            finish()
-        }
-    }
-
-
 }

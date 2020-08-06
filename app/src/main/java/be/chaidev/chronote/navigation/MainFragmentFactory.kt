@@ -1,4 +1,4 @@
-package be.chaidev.chronote.ui.main
+package be.chaidev.chronote.navigation
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory

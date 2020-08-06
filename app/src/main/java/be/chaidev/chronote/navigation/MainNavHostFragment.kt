@@ -1,8 +1,7 @@
-package be.chaidev.chronote.ui
+package be.chaidev.chronote.navigation
 
 import android.content.Context
 import androidx.navigation.fragment.NavHostFragment
-import be.chaidev.chronote.ui.main.MainFragmentFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
