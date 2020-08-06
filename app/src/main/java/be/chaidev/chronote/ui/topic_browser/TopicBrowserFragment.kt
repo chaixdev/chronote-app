@@ -3,6 +3,7 @@ package be.chaidev.chronote.ui.topic_browser
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -55,11 +56,12 @@ class TopicBrowserFragment constructor(
 
 
     private fun displayError(message: String?) {
-        if (message != null) {
-            text.text = message
-        } else {
-            text.text = "unknown error"
+        var msg = message
+        if (msg == null) {
+            msg = "unknown error"
+
         }
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
     }
 
     private fun displayProgressBar(isDisplayed: Boolean) {
@@ -68,7 +70,7 @@ class TopicBrowserFragment constructor(
     }
 
     private fun populateList(topics: List<Topic>) {
-        listAdapter.addData(topics)
+        listAdapter.replace(topics)
         listAdapter.notifyDataSetChanged()
     }
 

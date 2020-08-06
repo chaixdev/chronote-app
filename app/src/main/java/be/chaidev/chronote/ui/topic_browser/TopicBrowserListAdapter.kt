@@ -1,11 +1,13 @@
 package be.chaidev.chronote.ui.topic_browser
 
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import be.chaidev.chronote.R
 import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.util.DateTimeUtils
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.topic_browser_element.view.*
 
@@ -16,11 +18,13 @@ class TopicBrowserListAdapter(
     class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(topic: Topic) {
             itemView.tv_topic_title.text = topic.subject.title
-            itemView.tv_topic_date_modified.text = topic.dateModified
+            itemView.tv_topic_date_modified.text = DateTimeUtils.formatInstant(topic.dateModified)
+            itemView.tv_topic_note_count.text = "${topic.notes.size}"
             itemView.tags_container.removeAllViews()
             topic.tags.forEach{
                 val chip = Chip(itemView.context)
-                chip.setText(it)
+                chip.text = it
+                chip.setChipBackgroundColorResource(R.color.secondaryColor)
                 itemView.tags_container.addView(chip)
             }
         }
@@ -41,5 +45,11 @@ class TopicBrowserListAdapter(
 
     fun addData(list: List<Topic>) {
         topics.addAll(list)
+    }
+
+    fun replace(list:List<Topic>){
+        topics.clear()
+        topics.addAll(list)
+
     }
 }

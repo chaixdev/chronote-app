@@ -1,8 +1,7 @@
 package be.chaidev.chronote.di
 
-import be.chaidev.chronote.data.cache.CacheMapper
+import be.chaidev.chronote.data.cache.DataCache
 import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.network.retrofit.NetworkMapper
 import be.chaidev.chronote.data.network.retrofit.StreamarksApi
 import be.chaidev.chronote.data.repository.TopicsRepository
 import dagger.Module
@@ -18,11 +17,9 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideTopicsRepository(
-        topicDao: TopicDao,
-        streamarksApi: StreamarksApi,
-        cacheMapper: CacheMapper,
-        networkMapper: NetworkMapper
+        dataCache:DataCache,
+        streamarksApi: StreamarksApi
     ): TopicsRepository {
-        return TopicsRepository(topicDao, streamarksApi, cacheMapper, networkMapper)
+        return TopicsRepository(dataCache, streamarksApi)
     }
 }
