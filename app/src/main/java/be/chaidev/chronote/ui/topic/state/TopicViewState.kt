@@ -20,9 +20,10 @@ class TopicViewState(
 
     @Parcelize
     data class TopicBrowser(
-        var topicsList:List<Topic>? = null,
-        var order:String? = null,
-        var tagFilter:String?=null
+        var topicsList:List<Topic> = ArrayList(),
+        var order:String = "",
+        var tagFilter:String=""
+
     ):Parcelable
 
     @Parcelize
