@@ -1,4 +1,11 @@
 <resources>
+    <string name="text_error">Error</string>
+    <string name="text_success">Success</string>
+    <string name="text_yes">yes</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_info">Info</string>
+    <string name="are_you_sure">Are you sure?</string>
     <string name="app_name">Chronote</string>
     <string name="buttons_welcome">Make timed notes</string>
     <string name="button_1">new topic</string>
@@ -13,4 +20,7 @@
     <string name="loading_date">loading date</string>
     <string name="loading_note_count">loading note count</string>
     <string name="tag">tag</string>
+    <string name="newTopic">new topic</string>
+    <string name="addTopic">add topic</string>
+    <string name="new_topic_description">add a new topic</string>
 </resources>

@@ -3,7 +3,7 @@ package be.chaidev.chronote.ui.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.chaidev.chronote.R
-import be.chaidev.chronote.ui.topic_browser.TopicBrowserFragment
+import be.chaidev.chronote.ui.topic.TopicBrowserFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
