@@ -14,15 +14,16 @@ import be.chaidev.chronote.R
 import be.chaidev.chronote.ui.mvi.DataStateChangeListener
 import be.chaidev.chronote.ui.mvi.UICommunicationListener
 import be.chaidev.chronote.ui.topic.viewmodel.TopicBrowserViewModel
+import be.chaidev.chronote.util.Constants.TAG
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-abstract class TopicFragment: Fragment(){
+abstract class TopicFragment(fragmentResourceReference: Int) : Fragment(fragmentResourceReference){
 
     lateinit var stateChangeListener: DataStateChangeListener
     lateinit var uiCommunicationListener: UICommunicationListener
 
-    private val viewModel: TopicBrowserViewModel by viewModels()
+    protected val viewModel: TopicBrowserViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,10 +59,6 @@ abstract class TopicFragment: Fragment(){
         }catch(e: ClassCastException){
             Log.e(TAG, "$context must implement UICommunicationListener" )
         }
-    }
-
-    companion object {
-        private val TAG: String = "AppDebug"
     }
 
 }
