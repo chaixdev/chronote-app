@@ -1,6 +1,5 @@
-package be.chaidev.chronote.ui.topic_browser
+package be.chaidev.chronote.ui.topic
 
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,4 +51,5 @@ class TopicBrowserListAdapter(
         topics.addAll(list)
 
     }
+
 }

@@ -2,7 +2,7 @@ package be.chaidev.chronote.navigation
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import be.chaidev.chronote.ui.topic_browser.TopicBrowserFragment
+import be.chaidev.chronote.ui.topic.TopicBrowserFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 

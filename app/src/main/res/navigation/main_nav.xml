@@ -7,6 +7,6 @@
 
     <fragment
         android:id="@+id/topicBrowserFragment"
-        android:name="be.chaidev.chronote.ui.topic_browser.TopicBrowserFragment"
+        android:name="be.chaidev.chronote.ui.topic.TopicBrowserFragment"
         android:label="TopicBrowserFragment" />
 </navigation>
