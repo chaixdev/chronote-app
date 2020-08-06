@@ -7,7 +7,6 @@ data class Note (
 
     val id: String,
     val body: String,
-    val interval: Interval,
-    val start: Long,
-    val end: Long
-)
+    val time: Long
+){
+}

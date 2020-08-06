@@ -21,9 +21,9 @@ class TopicBrowserViewModel @ViewModelInject internal constructor(
     val dataState: LiveData<DataState<List<Topic>>>
         get() = _dataState
 
-    fun setStateEvent(mainStateEvent: TopicStateEvent) {
+    fun setStateEvent(stateEvent: TopicStateEvent) {
         viewModelScope.launch {
-            when (mainStateEvent) {
+            when (stateEvent) {
                 is TopicStateEvent.GetTopicEvents -> {
                     topicsRepository.getTopics()
                         .onEach { dataState ->

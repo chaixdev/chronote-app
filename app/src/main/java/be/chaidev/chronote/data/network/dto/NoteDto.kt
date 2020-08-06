@@ -1,6 +1,6 @@
 package be.chaidev.chronote.data.network.dto
 
-import be.chaidev.chronote.data.model.Interval
+import be.chaidev.chronote.data.model.Note
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -13,9 +13,25 @@ data class NoteDto(
     @Expose
     val body: String,
 
-    @SerializedName("interval")
+    @SerializedName("time")
     @Expose
-    val interval: Interval
+    val time: Long
+) {
+    fun toNote(): Note {
+        return Note(
+            id,
+            body,
+            time
+        )
+    }
 
-    )
+    fun fromNote(note: Note): NoteDto {
+
+        return NoteDto(
+            note.id,
+            note.body,
+            note.time
+        )
+    }
+}
 
