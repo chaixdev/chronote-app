@@ -5,7 +5,7 @@ import be.chaidev.chronote.data.network.dto.NoteDto
 import be.chaidev.chronote.data.network.retrofit.NoteDeserializer
 import be.chaidev.chronote.data.network.retrofit.StreamarksApi
 import be.chaidev.chronote.data.network.retrofit.SubjectDeserializer
-import be.chaidev.chronote.util.STREAMARKS_URL
+import be.chaidev.chronote.util.Constants.STREAMARKS_URL
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

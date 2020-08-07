@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
     app:cardElevation="0dp"
-    app:contentPadding="10dp"
-    style="@style/topiclist.element.style">
+    app:contentPadding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"

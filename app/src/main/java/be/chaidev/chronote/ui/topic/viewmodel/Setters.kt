@@ -1,5 +1,4 @@
 package be.chaidev.chronote.ui.topic.viewmodel
-import android.net.Uri
 import be.chaidev.chronote.data.model.Topic
 
 fun TopicBrowserViewModel.setTopicListData(topicList: List<Topic>){
