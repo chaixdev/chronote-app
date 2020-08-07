@@ -3,13 +3,18 @@ package be.chaidev.chronote.ui.topic.viewmodel
 import android.content.SharedPreferences
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import be.chaidev.chronote.data.repository.TopicsRepository
 import be.chaidev.chronote.ui.AbstractViewModel
+import be.chaidev.chronote.ui.mvi.AbsentLiveData
 import be.chaidev.chronote.ui.topic.state.TopicViewState
 import be.chaidev.chronote.ui.topic.state.TopicStateEvent
 import be.chaidev.chronote.ui.mvi.DataState
+import be.chaidev.chronote.ui.topic.state.TopicStateEvent.*
 import be.chaidev.chronote.util.SharedPreferenceKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class TopicBrowserViewModel
@@ -21,14 +26,35 @@ internal constructor(
 ) : AbstractViewModel<TopicStateEvent, TopicViewState>() {
 
     override fun handleStateEvent(stateEvent: TopicStateEvent): LiveData<DataState<TopicViewState>> {
-        TODO("Not yet implemented")
+        when (stateEvent) {
+            is LoadTopicsEvent -> {
+                //todo: implement
+                return AbsentLiveData.create()
+
+            }
+
+            is DeleteTopicEvent -> {
+
+                //todo: implement
+                return AbsentLiveData.create()
+            }
+
+            is UpdateTopicEvent -> {
+                //todo: implement
+                return AbsentLiveData.create()
+            }
+
+            is None -> {
+                return AbsentLiveData.create()
+            }
+        }
     }
 
     override fun initNewViewState(): TopicViewState {
         return TopicViewState()
     }
 
-    fun saveFilterOptions(filter: String, order: String){
+    fun saveFilterOptions(filter: String, order: String) {
         editor.putString(SharedPreferenceKeys.TOPIC_BROWSER_FILTER, filter)
         editor.apply()
 
@@ -36,13 +62,13 @@ internal constructor(
         editor.apply()
     }
 
-    fun cancelActiveJobs(){
+    fun cancelActiveJobs() {
 //        topicsRepository.cancelActiveJobs() // cancel active jobs
         handlePendingData() // hide progress bar
     }
 
-    fun handlePendingData(){
-        setStateEvent(TopicStateEvent.None())
+    fun handlePendingData() {
+        setStateEvent(None())
     }
 
     override fun onCleared() {

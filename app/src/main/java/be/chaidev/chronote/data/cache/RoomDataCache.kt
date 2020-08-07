@@ -1,5 +1,7 @@
 package be.chaidev.chronote.data.cache
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import be.chaidev.chronote.data.cache.dao.NoteDao
 import be.chaidev.chronote.data.cache.dao.TopicDao
 import be.chaidev.chronote.data.cache.entity.NoteEntity
@@ -14,17 +16,17 @@ constructor(
     private val topicDao: TopicDao,
     private val noteDao: NoteDao
 ) : DataCache {
-    override suspend fun findTopic(topidId: String): Topic? {
-        return topicDao.findTopic(topidId)?.toTopic(fetchNotesForTopic(topidId))
+    override fun findTopic(topidId: String): Topic? {
+        return topicDao.findTopic(topidId)?.toTopic(fetchNotesForTopic(topidId).value)
     }
 
-    override suspend fun getAllTopics(): List<Topic> {
+    override fun getAllTopics(): LiveData<List<Topic>> {
 
         return topicDao.getAllTopics().map { it.toTopic(fetchNotesForTopic(it.topicId)) }
 
     }
 
-    override suspend fun saveTopic(topic: Topic) {
+    override fun saveTopic(topic: Topic) {
 
         // 1.read from room
         val cached = findTopic(topic.id)
@@ -36,23 +38,27 @@ constructor(
         }
     }
 
-    override suspend fun saveTopics(topics: List<Topic>) {
+    override fun saveTopics(topics: List<Topic>) {
         topics.forEach {
             saveTopic(it)
         }
     }
 
-    override suspend fun deleteTopic(topicId: String) {
+    override fun deleteTopic(topicId: String) {
         TODO("Not yet implemented")
     }
 
-    private suspend fun insertTopicAndNotes(topic: Topic) {
+    override  fun returnOrderedTopicQuery(filterAndOrder: String): LiveData<List<Topic>> {
+        TODO("Not yet implemented")
+    }
+
+    private fun insertTopicAndNotes(topic: Topic) {
         topicDao.insert(TopicEntity.fromTopic(topic))
         noteDao.insertAll(topic.notes.map { NoteEntity.fromNote(it, topic.id) })
     }
 
 
-    private suspend fun fetchNotesForTopic(topicId: String): List<Note> {
+    private fun fetchNotesForTopic(topicId: String): LiveData<List<Note>> {
 
         // return empty immediately if topicId not found
         val cachedNotes = noteDao.getNotesForTopic(topicId)

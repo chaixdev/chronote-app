@@ -20,23 +20,24 @@ class TopicViewState(
 
     @Parcelize
     data class TopicBrowser(
-        var topicsList:List<Topic> = ArrayList(),
-        var order:String = "",
-        var tagFilter:String=""
+        var topicsList: List<Topic> = ArrayList(),
+        var isQueryInProgress: Boolean = true,
+        var order: String = "",
+        var tagFilter: String = ""
 
-    ):Parcelable
-
-    @Parcelize
-    class ViewTopic (
-        var topic:Topic? = null
-
-    ):Parcelable
+    ) : Parcelable
 
     @Parcelize
-    class UpdateTopic (
-        var topic:Topic? = null
+    class ViewTopic(
+        var topic: Topic? = null
 
-    ):Parcelable
+    ) : Parcelable
+
+    @Parcelize
+    class UpdateTopic(
+        var topic: Topic? = null
+
+    ) : Parcelable
 
 
 }
