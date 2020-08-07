@@ -7,6 +7,7 @@ import be.chaidev.chronote.data.cache.DataCache
 import be.chaidev.chronote.data.cache.RoomDataCache
 import be.chaidev.chronote.data.cache.dao.NoteDao
 import be.chaidev.chronote.data.cache.dao.TopicDao
+import be.chaidev.chronote.data.model.Topic
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,7 +44,7 @@ object DbModule {
 
     @Singleton
     @Provides
-    fun provideDataCache(topicDao: TopicDao, noteDao: NoteDao): DataCache {
+    fun provideDataCache(topicDao: TopicDao, noteDao: NoteDao): DataCache<Topic> {
         return RoomDataCache(topicDao, noteDao)
     }
 

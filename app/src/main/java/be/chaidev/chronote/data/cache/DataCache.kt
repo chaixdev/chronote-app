@@ -1,16 +1,18 @@
 package be.chaidev.chronote.data.cache
 
-import be.chaidev.chronote.data.model.Topic
+import androidx.lifecycle.LiveData
 
-interface DataCache {
+interface DataCache<Item> {
 
-    suspend fun findTopic(topidId:String): Topic?
+    fun find(topidId:String): LiveData<Item>
 
-    suspend fun getAllTopics():List<Topic>
+    fun getAll():LiveData<List<Item>>
 
-    suspend fun saveTopic(topic:Topic)
+    fun save(topic:Item)
 
-    suspend fun saveTopics(topics:List<Topic>)
+    fun saveAll(topics:List<Item>)
 
-    suspend fun deleteTopic(topicId:String)
+    fun delete(topicId:String)
+
+    fun returnOrderedQuery(filterAndOrder: String): LiveData<List<Item>>
 }
