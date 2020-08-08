@@ -59,19 +59,38 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     // lifecycle
-    def lifecycle_version = "2.2.0-alpha03"
+    def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    // Testing dependencies
-    androidTestImplementation "junit:junit:4.13"
-    androidTestImplementation "androidx.test:core-ktx:1.2.0"
-    androidTestImplementation "androidx.test.ext:junit-ktx:1.1.1"
-    androidTestImplementation "androidx.test:rules:1.2.0"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+    // -------- INSTRUMENTATION TESTS (use JUnit4)
+    androidTestImplementation 'junit:junit:4.13'
+
+    // AndroidX test
+    def androidx_test_version = "1.2.0"
+    androidTestImplementation "androidx.test:core:$androidx_test_version"
+    androidTestImplementation "androidx.test:runner:$androidx_test_version"
+
+    // Architecture components testing
+    def androidx_arch_test_version = "2.1.0"
+    androidTestImplementation "androidx.arch.core:core-testing:$androidx_arch_test_version"
+
+
+    // -------- LOCAL UNIT TESTS (use JUnit5)
+    // JUnit Jupiter
+    def junit_jupiter_version = "5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+
+
+    // -------- MOCKITO
+    def mockito_version = "2.25.0"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+
 
     // Hilt dependencies
     implementation "com.google.dagger:hilt-android:$hilt_version"

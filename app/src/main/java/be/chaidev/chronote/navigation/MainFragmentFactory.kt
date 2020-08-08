@@ -8,10 +8,7 @@ import javax.inject.Inject
 
 
 @ExperimentalCoroutinesApi
-class MainFragmentFactory @Inject constructor(
-    private val parameter: String
-
-) : FragmentFactory() {
+class MainFragmentFactory @Inject constructor() : FragmentFactory() {
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         return when(className){
             TopicBrowserFragment::class.java.name ->{

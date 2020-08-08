@@ -2,10 +2,7 @@ package be.chaidev.chronote.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.switchMap
-import be.chaidev.chronote.data.cache.DataCache
 import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.cache.entity.TopicEntity
 import be.chaidev.chronote.data.model.Topic
 import be.chaidev.chronote.data.network.ApiSuccessResponse
 import be.chaidev.chronote.data.network.GenericApiResponse
@@ -15,7 +12,6 @@ import be.chaidev.chronote.system.Device
 import be.chaidev.chronote.ui.mvi.DataState
 import be.chaidev.chronote.ui.topic.state.TopicViewState
 import be.chaidev.chronote.util.Constants
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
@@ -26,7 +22,7 @@ import javax.inject.Inject
 class TopicsRepository
 @Inject
 constructor(
-    val cache: DataCache<Topic>,
+    val topicsDao: TopicDao,
     val api: StreamarksApi,
     val system: Device
 ) : JobManager("TopicsRepository") {
@@ -58,38 +54,40 @@ constructor(
             }
 
             override fun loadFromCache(): LiveData<TopicViewState> {
-                return cache.returnOrderedQuery(filterAndOrder = filterAndOrder)
-                    .switchMap {
-                        object : LiveData<TopicViewState>() {
-                            override fun onActive() {
-                                super.onActive()
-                                value = TopicViewState(
-                                    TopicViewState.TopicBrowser(
-                                        topicsList = it,
-                                        isQueryInProgress = true
-                                    )
-                                )
-                            }
-                        }
-                    }
+                TODO()
+//                return topicsDao.returnOrderedQuery(filterAndOrder = filterAndOrder)
+//                    .switchMap {
+//                        object : LiveData<TopicViewState>() {
+//                            override fun onActive() {
+//                                super.onActive()
+//                                value = TopicViewState(
+//                                    TopicViewState.TopicBrowser(
+//                                        topicsList = it,
+//                                        isQueryInProgress = true
+//                                    )
+//                                )
+//                            }
+//                        }
+//                    }
             }
 
             override suspend fun updateLocalDb(cacheObject: List<Topic>?) {
-                if(cacheObject != null){
-                    withContext(IO){
-                        for(topic in cacheObject){
-                            try{
-                                // new job for each element to insert (parallel)
-                                launch{
-                                    Log.d(Constants.TAG,"updating cache for topic ${topic.id}:${topic.subject.title}" )
-                                    cache.save(topic)
-                                }
-                            }catch(e: Exception){
-                                Log.e(Constants.TAG,"Error while updating cache for topic id ${topic.id}" )
-                            }
-                        }
-                    }
-                }
+                TODO()
+//                if(cacheObject != null){
+//                    withContext(IO){
+//                        for(topic in cacheObject){
+//                            try{
+//                                // new job for each element to insert (parallel)
+//                                launch{
+//                                    Log.d(Constants.TAG,"updating cache for topic ${topic.id}:${topic.subject.title}" )
+//                                    topicsDao.save(topic)
+//                                }
+//                            }catch(e: Exception){
+//                                Log.e(Constants.TAG,"Error while updating cache for topic id ${topic.id}" )
+//                            }
+//                        }
+//                    }
+//                }
 
             }
 
