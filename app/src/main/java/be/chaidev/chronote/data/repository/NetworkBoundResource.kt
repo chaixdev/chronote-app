@@ -11,6 +11,7 @@ import be.chaidev.chronote.ui.mvi.DataState
 import be.chaidev.chronote.ui.mvi.Response
 import be.chaidev.chronote.ui.mvi.ResponseType
 import be.chaidev.chronote.util.Constants.NETWORK_TIMEOUT
+import be.chaidev.chronote.util.Constants.TAG
 import be.chaidev.chronote.util.Constants.TESTING_CACHE_DELAY
 import be.chaidev.chronote.util.Constants.TESTING_NETWORK_DELAY
 import be.chaidev.chronote.util.ErrorHandling
@@ -27,9 +28,6 @@ abstract class NetworkBoundResource<NetworkDto, CacheEntity, ViewStateType>
     shouldCancelIfNoInternet: Boolean, // should this job be cancelled if there is no network?
     shouldLoadFromCache: Boolean // should the cached data be loaded?
 ) {
-
-    private val TAG: String = "AppDebug"
-
     protected val result = MediatorLiveData<DataState<ViewStateType>>()
     protected lateinit var job: CompletableJob
     protected lateinit var coroutineScope: CoroutineScope

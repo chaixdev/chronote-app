@@ -3,6 +3,7 @@ package be.chaidev.chronote.di
 import android.app.Application
 import be.chaidev.chronote.data.cache.DataCache
 import be.chaidev.chronote.data.cache.dao.TopicDao
+import be.chaidev.chronote.data.model.Topic
 import be.chaidev.chronote.data.network.retrofit.StreamarksApi
 import be.chaidev.chronote.data.repository.TopicsRepository
 import be.chaidev.chronote.system.Device
@@ -19,7 +20,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideTopicsRepository(
-        dataCache:DataCache,
+        dataCache:DataCache<Topic>,
         streamarksApi: StreamarksApi,
         device: Device
     ): TopicsRepository {

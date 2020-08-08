@@ -1,5 +1,6 @@
 package be.chaidev.chronote.data.cache.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -16,6 +17,6 @@ interface NoteDao {
     fun insertAll(note: List<NoteEntity>)
 
     @Query("SELECT * FROM notes WHERE topicId=:topidId")
-    fun getNotesForTopic(topidId: String) :List<NoteEntity>
+    fun getNotesForTopic(topidId: String) : LiveData<List<NoteEntity>>
 
 }

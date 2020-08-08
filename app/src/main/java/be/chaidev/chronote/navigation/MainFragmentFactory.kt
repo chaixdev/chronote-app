@@ -15,9 +15,7 @@ class MainFragmentFactory @Inject constructor(
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         return when(className){
             TopicBrowserFragment::class.java.name ->{
-                TopicBrowserFragment(
-                    parameter
-                )
+                TopicBrowserFragment()
             }
             else -> super.instantiate(classLoader, className)
         }

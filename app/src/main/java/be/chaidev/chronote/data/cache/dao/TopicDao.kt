@@ -4,16 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import be.chaidev.chronote.data.cache.entity.TopicEntity
 import be.chaidev.chronote.data.model.Topic
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TopicDao {
 
     // topics
     @Query("SELECT * FROM topics ORDER BY topicId DESC")
-    fun getAllTopics(): LiveData<List<TopicEntity>>
+    fun getAllTopics(): Flow<List<TopicEntity>>
 
     @Query("SELECT * FROM topics WHERE topicId=:topicId")
-    fun findTopic(topicId:String): TopicEntity?
+    fun findTopic(topicId:String): Flow<TopicEntity>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -23,6 +24,6 @@ interface TopicDao {
     fun nukeTable()
 
 
-    fun returnOrderedTopicQuery(filterAndOrder: Any): LiveData<List<TopicEntity>>
+    fun returnOrderedTopicQuery(filterAndOrder: Any): Flow<List<TopicEntity>>
 
 }

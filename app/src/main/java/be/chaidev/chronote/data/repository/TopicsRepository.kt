@@ -1,5 +1,6 @@
 package be.chaidev.chronote.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
 import be.chaidev.chronote.data.cache.DataCache
@@ -13,45 +14,51 @@ import be.chaidev.chronote.data.network.retrofit.StreamarksApi
 import be.chaidev.chronote.system.Device
 import be.chaidev.chronote.ui.mvi.DataState
 import be.chaidev.chronote.ui.topic.state.TopicViewState
+import be.chaidev.chronote.util.Constants
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class TopicsRepository
 @Inject
 constructor(
-    val cache: DataCache,
-    val streamarksApi: StreamarksApi,
+    val cache: DataCache<Topic>,
+    val api: StreamarksApi,
     val system: Device
 ) : JobManager("TopicsRepository") {
     private val topics: List<Topic> = emptyList()
     fun getTopics(filterAndOrder: String): LiveData<DataState<TopicViewState>> {
 
-        return object : NetworkBoundResource<TopicDto, List<TopicEntity>, TopicViewState>(
+        return object : NetworkBoundResource<List<TopicDto>, List<Topic>, TopicViewState>(
             system.isInternetAvailable(),
             true,
             false,
             true
         ) {
             override suspend fun createCacheRequestAndReturn() {
-                withContext(Dispatchers.Main) {
+                withContext(Main) {
                     // finishing by viewing db cache
                     // addSource: LiveData method to have anohter trigger source
                     result.addSource(loadFromCache()) { onCompleteJob(DataState.data(it, null)) }
                 }
             }
 
-            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<TopicDto>) {
-                TODO("Not yet implemented")
+            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<List<TopicDto>>) {
+                val topicList = response.body.map(TopicDto::toTopic)
+                updateLocalDb(topicList)
+                createCacheRequestAndReturn()
             }
 
-            override fun createCall(): LiveData<GenericApiResponse<TopicDto>> {
-                TODO("Not yet implemented")
+            override fun createCall(): LiveData<GenericApiResponse<List<TopicDto>>> {
+                return api.getTopics()
             }
 
             override fun loadFromCache(): LiveData<TopicViewState> {
-                return cache.returnOrderedTopicQuery(filterAndOrder = filterAndOrder)
+                return cache.returnOrderedQuery(filterAndOrder = filterAndOrder)
                     .switchMap {
                         object : LiveData<TopicViewState>() {
                             override fun onActive() {
@@ -67,12 +74,27 @@ constructor(
                     }
             }
 
-            override suspend fun updateLocalDb(cacheObject: List<TopicEntity>?) {
-                TODO("Not yet implemented")
+            override suspend fun updateLocalDb(cacheObject: List<Topic>?) {
+                if(cacheObject != null){
+                    withContext(IO){
+                        for(topic in cacheObject){
+                            try{
+                                // new job for each element to insert (parallel)
+                                launch{
+                                    Log.d(Constants.TAG,"updating cache for topic ${topic.id}:${topic.subject.title}" )
+                                    cache.save(topic)
+                                }
+                            }catch(e: Exception){
+                                Log.e(Constants.TAG,"Error while updating cache for topic id ${topic.id}" )
+                            }
+                        }
+                    }
+                }
+
             }
 
             override fun setJob(job: Job) {
-                TODO("Not yet implemented")
+                addJob("getTopics",job)
             }
 
         }.asLiveData()
