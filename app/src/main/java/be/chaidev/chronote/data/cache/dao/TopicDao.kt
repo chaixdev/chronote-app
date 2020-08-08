@@ -1,29 +1,32 @@
 package be.chaidev.chronote.data.cache.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import be.chaidev.chronote.data.cache.entity.NoteEntity
 import be.chaidev.chronote.data.cache.entity.TopicEntity
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.data.cache.entity.TopicWithNotes
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TopicDao {
 
-    // topics
-    @Query("SELECT * FROM topics ORDER BY topicId DESC")
-    fun getAllTopics(): Flow<List<TopicEntity>>
-
-    @Query("SELECT * FROM topics WHERE topicId=:topicId")
-    fun findTopic(topicId:String): Flow<TopicEntity>
-
+    // Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTopic( topics: TopicEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert( topics: TopicEntity)
+    fun insertNotes(notes :List<NoteEntity>)
 
-    @Query("DELETE FROM topics")
-    fun nukeTable()
+    // Read one
+    @Transaction
+    @Query("SELECT * FROM topics WHERE id=:topicId")
+    fun getTopicsWithNotes(topicId:String):Flow<TopicWithNotes>
 
+    // Read many
+    @Transaction
+    @Query("SELECT * FROM topics")
+    fun getTopicsWithNotes(): Flow<List<TopicWithNotes>>
 
-    fun returnOrderedTopicQuery(filterAndOrder: Any): Flow<List<TopicEntity>>
+    @Query("SELECT * FROM topics ORDER BY dateModified ASC")
+    fun returnOrderedTopicQuery(): Flow<List<TopicEntity>>
 
 }

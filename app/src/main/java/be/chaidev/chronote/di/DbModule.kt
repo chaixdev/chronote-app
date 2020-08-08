@@ -3,11 +3,9 @@ package be.chaidev.chronote.di
 import android.content.Context
 import androidx.room.Room
 import be.chaidev.chronote.data.cache.AppDatabase
-import be.chaidev.chronote.data.cache.DataCache
-import be.chaidev.chronote.data.cache.RoomDataCache
-import be.chaidev.chronote.data.cache.dao.NoteDao
 import be.chaidev.chronote.data.cache.dao.TopicDao
 import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,27 +23,15 @@ object DbModule {
         return db.topicDao()
     }
 
-    @Provides
-    @Singleton
-    fun provideNoteDao(db: AppDatabase): NoteDao {
-        return db.noteDao()
-    }
-
     @Singleton
     @Provides
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            AppDatabase.DATABASE_NAME
+            Constants.DATABASE_NAME
         ).fallbackToDestructiveMigration()
             .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideDataCache(topicDao: TopicDao, noteDao: NoteDao): DataCache<Topic> {
-        return RoomDataCache(topicDao, noteDao)
     }
 
 }

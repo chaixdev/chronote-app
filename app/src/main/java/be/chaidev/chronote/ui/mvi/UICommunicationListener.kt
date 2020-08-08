@@ -1,6 +1,5 @@
 package be.chaidev.chronote.ui.mvi
 
-import be.chaidev.chronote.ui.AreYouSureCallback
 
 interface UICommunicationListener {
 
