@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.repository
+package be.chaidev.chronote.repository
 
 import android.util.Log
 import be.chaidev.chronote.util.Constants.TAG

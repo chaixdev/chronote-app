@@ -1,6 +1,6 @@
 package be.chaidev.chronote.data.network.dto
 
-import be.chaidev.chronote.data.model.Note
+import be.chaidev.chronote.model.Note
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 

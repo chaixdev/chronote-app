@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import be.chaidev.chronote.R
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.ui.mvi.GenericViewHolder
 import be.chaidev.chronote.util.DateTimeUtils
 import com.google.android.material.chip.Chip
@@ -19,7 +19,6 @@ class TopicBrowserListAdapter(
     private val NO_MORE_RESULTS = -1
     private val TOPIC_ITEM = 0
     private val TAG: String = "AppDebug"
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when(viewType){
@@ -85,7 +84,6 @@ class TopicBrowserListAdapter(
         override fun areContentsTheSame(oldItem: Topic, newItem: Topic): Boolean {
             return oldItem == newItem
         }
-
     }
 
     private val differ =

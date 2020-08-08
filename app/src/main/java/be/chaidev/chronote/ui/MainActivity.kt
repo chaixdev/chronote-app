@@ -1,12 +1,10 @@
-package be.chaidev.chronote.ui.main
+package be.chaidev.chronote.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.chaidev.chronote.R
-import be.chaidev.chronote.ui.topic.TopicBrowserFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import javax.inject.Inject
 
 
 /**

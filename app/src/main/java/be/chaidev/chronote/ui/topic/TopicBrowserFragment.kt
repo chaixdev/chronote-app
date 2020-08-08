@@ -2,7 +2,6 @@ package be.chaidev.chronote.ui.topic
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import be.chaidev.chronote.R
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.ui.topic.viewmodel.setTopic
-import be.chaidev.chronote.util.Constants
 import be.chaidev.chronote.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.topic_browser_fragment.*

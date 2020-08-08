@@ -1,7 +1,7 @@
 package be.chaidev.chronote.ui.topic.state
 
 import android.os.Parcelable
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.model.Topic
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

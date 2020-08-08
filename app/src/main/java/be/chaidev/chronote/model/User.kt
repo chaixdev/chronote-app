@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.model
+package be.chaidev.chronote.model
 
 import be.chaidev.chronote.data.cache.entity.TopicEntity
 

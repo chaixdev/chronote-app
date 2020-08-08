@@ -1,7 +1,7 @@
 package be.chaidev.chronote.data
 
 import androidx.room.TypeConverter
-import be.chaidev.chronote.data.model.Type
+import be.chaidev.chronote.model.Type
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.Instant
@@ -25,7 +25,7 @@ class Converters {
         @TypeConverter
         @JvmStatic
         fun toList(listOfString: String?): List<String?>? {
-            return Gson().fromJson(listOfString, object : TypeToken<List<String?>?>() {}.getType())
+            return Gson().fromJson(listOfString, object : TypeToken<List<String?>?>() {}.type)
         }
 
         @TypeConverter

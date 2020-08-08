@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.model
+package be.chaidev.chronote.model
 
 import com.google.gson.annotations.SerializedName
 

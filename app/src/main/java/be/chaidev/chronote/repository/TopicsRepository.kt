@@ -1,21 +1,17 @@
-package be.chaidev.chronote.data.repository
+package be.chaidev.chronote.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.model.Topic
 import be.chaidev.chronote.data.network.ApiSuccessResponse
 import be.chaidev.chronote.data.network.GenericApiResponse
 import be.chaidev.chronote.data.network.dto.TopicDto
 import be.chaidev.chronote.data.network.retrofit.StreamarksApi
+import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.system.Device
 import be.chaidev.chronote.ui.mvi.DataState
 import be.chaidev.chronote.ui.topic.state.TopicViewState
-import be.chaidev.chronote.util.Constants
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

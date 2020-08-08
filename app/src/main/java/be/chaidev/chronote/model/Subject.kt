@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.model
+package be.chaidev.chronote.model
 
 import android.os.Parcelable
 import androidx.room.Entity
