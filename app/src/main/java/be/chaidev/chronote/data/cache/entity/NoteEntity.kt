@@ -2,7 +2,7 @@ package be.chaidev.chronote.data.cache.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import be.chaidev.chronote.data.model.Note
+import be.chaidev.chronote.model.Note
 
 @Entity(tableName = "notes")
 data class NoteEntity (

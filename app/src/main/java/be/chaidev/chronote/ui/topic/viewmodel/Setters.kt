@@ -1,5 +1,5 @@
 package be.chaidev.chronote.ui.topic.viewmodel
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.model.Topic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

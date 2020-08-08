@@ -1,8 +1,8 @@
 package be.chaidev.chronote.ui.topic.viewmodel
 
-import be.chaidev.chronote.data.model.Subject
-import be.chaidev.chronote.data.model.Topic
-import be.chaidev.chronote.data.model.Type
+import be.chaidev.chronote.model.Subject
+import be.chaidev.chronote.model.Topic
+import be.chaidev.chronote.model.Type
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.Instant
 @ExperimentalCoroutinesApi

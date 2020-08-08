@@ -3,18 +3,15 @@ package be.chaidev.chronote.ui.topic.viewmodel
 import android.content.SharedPreferences
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import be.chaidev.chronote.data.repository.TopicsRepository
+import be.chaidev.chronote.repository.TopicsRepository
 import be.chaidev.chronote.ui.AbstractViewModel
 import be.chaidev.chronote.ui.mvi.AbsentLiveData
-import be.chaidev.chronote.ui.topic.state.TopicViewState
-import be.chaidev.chronote.ui.topic.state.TopicStateEvent
 import be.chaidev.chronote.ui.mvi.DataState
+import be.chaidev.chronote.ui.topic.state.TopicStateEvent
 import be.chaidev.chronote.ui.topic.state.TopicStateEvent.*
+import be.chaidev.chronote.ui.topic.state.TopicViewState
 import be.chaidev.chronote.util.SharedPreferenceKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class TopicBrowserViewModel

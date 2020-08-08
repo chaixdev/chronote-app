@@ -2,7 +2,7 @@ package be.chaidev.chronote.data.cache.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.model.Topic
 
 data class TopicWithNotes(
     @Embedded

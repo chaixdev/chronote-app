@@ -1,7 +1,7 @@
 package be.chaidev.chronote.data.network.dto
 
-import be.chaidev.chronote.data.model.Subject
-import be.chaidev.chronote.data.model.Topic
+import be.chaidev.chronote.model.Subject
+import be.chaidev.chronote.model.Topic
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.time.Instant

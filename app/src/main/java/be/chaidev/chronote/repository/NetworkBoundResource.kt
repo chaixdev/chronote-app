@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.repository
+package be.chaidev.chronote.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -153,7 +153,7 @@ abstract class NetworkBoundResource<NetworkDto, CacheEntity, ViewStateType>
         result.value = dataState
     }
 
-    @UseExperimental(InternalCoroutinesApi::class)
+    @OptIn(InternalCoroutinesApi::class)
     private fun initNewJob(): Job{
         Log.d(TAG, "initNewJob: called.")
         job = Job() // create new job

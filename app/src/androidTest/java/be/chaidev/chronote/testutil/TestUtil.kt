@@ -1,10 +1,10 @@
 package be.chaidev.chronote.testutil
 
 import be.chaidev.chronote.data.cache.entity.TopicEntity
-import be.chaidev.chronote.data.model.Note
-import be.chaidev.chronote.data.model.Subject
-import be.chaidev.chronote.data.model.Topic
-import be.chaidev.chronote.data.model.Type
+import be.chaidev.chronote.model.Note
+import be.chaidev.chronote.model.Subject
+import be.chaidev.chronote.model.Topic
+import be.chaidev.chronote.model.Type
 import java.time.Instant
 
 /*

@@ -3,10 +3,9 @@ package be.chaidev.chronote.data.cache.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import be.chaidev.chronote.data.model.Note
-import be.chaidev.chronote.data.model.Subject
-import be.chaidev.chronote.data.model.Topic
-import be.chaidev.chronote.data.model.Type
+import be.chaidev.chronote.model.Note
+import be.chaidev.chronote.model.Subject
+import be.chaidev.chronote.model.Topic
 import java.time.Instant
 
 @Entity(tableName = "topics")

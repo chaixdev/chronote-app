@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import be.chaidev.chronote.data.cache.AppDatabase
 import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.model.Topic
 import be.chaidev.chronote.util.Constants
 import dagger.Module
 import dagger.Provides

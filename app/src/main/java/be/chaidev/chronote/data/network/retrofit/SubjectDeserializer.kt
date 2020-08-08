@@ -1,8 +1,6 @@
 package be.chaidev.chronote.data.network.retrofit
 
-import be.chaidev.chronote.data.model.Subject
-import be.chaidev.chronote.data.model.Topic
-import be.chaidev.chronote.data.network.dto.NoteDto
+import be.chaidev.chronote.model.Subject
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
