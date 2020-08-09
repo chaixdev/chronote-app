@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.network.dto
+package be.chaidev.chronote.datasources.network.dto
 
 import be.chaidev.chronote.model.Note
 import com.google.gson.annotations.Expose

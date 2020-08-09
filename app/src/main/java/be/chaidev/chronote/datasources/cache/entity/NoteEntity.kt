@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.cache.entity
+package be.chaidev.chronote.datasources.cache.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -18,13 +18,19 @@ data class NoteEntity (
     }
 
     companion object {
-        fun fromNote(note:Note, topicId:String):NoteEntity{
+        @JvmStatic
+        fun fromNote(note: Note, topicId: String): NoteEntity {
             return NoteEntity(
                 note.id,
                 note.body,
                 note.time,
                 topicId
             )
+        }
+
+        @JvmStatic
+        fun fromNotes(notes: List<Note>, topicId: String): List<NoteEntity> {
+            return notes.map { note -> fromNote(note, topicId) }
         }
     }
 }

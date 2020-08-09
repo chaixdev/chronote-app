@@ -1,7 +1,9 @@
 package be.chaidev.chronote.navigation
 
 import android.content.Context
+import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
+import be.chaidev.chronote.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
@@ -15,6 +17,7 @@ class MainNavHostFragment: NavHostFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d(Constants.TAG, "navhostfragment onAttach()")
         childFragmentManager.fragmentFactory = fragmentFactory
     }
 }

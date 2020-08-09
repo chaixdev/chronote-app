@@ -3,10 +3,10 @@ package be.chaidev.chronote.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import be.chaidev.chronote.data.network.ApiEmptyResponse
-import be.chaidev.chronote.data.network.ApiErrorResponse
-import be.chaidev.chronote.data.network.ApiSuccessResponse
-import be.chaidev.chronote.data.network.GenericApiResponse
+import be.chaidev.chronote.datasources.network.ApiEmptyResponse
+import be.chaidev.chronote.datasources.network.ApiErrorResponse
+import be.chaidev.chronote.datasources.network.ApiSuccessResponse
+import be.chaidev.chronote.datasources.network.GenericApiResponse
 import be.chaidev.chronote.ui.mvi.DataState
 import be.chaidev.chronote.ui.mvi.Response
 import be.chaidev.chronote.ui.mvi.ResponseType
@@ -21,9 +21,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
-abstract class NetworkBoundResource<NetworkDto, CacheEntity, ViewStateType>
+abstract class NetworkBoundResource<NetworkDto, Model, ViewStateType>
     (
-    isNetworkAvailable: Boolean, // is their a network connection?
+    isNetworkAvailable: Boolean, // is there a network connection?
     isNetworkRequest: Boolean, // is this a network request?
     shouldCancelIfNoInternet: Boolean, // should this job be cancelled if there is no network?
     shouldLoadFromCache: Boolean // should the cached data be loaded?
@@ -177,7 +177,7 @@ abstract class NetworkBoundResource<NetworkDto, CacheEntity, ViewStateType>
 
     fun asLiveData() = result as LiveData<DataState<ViewStateType>>
 
-    abstract suspend fun createCacheRequestAndReturn()
+    open suspend fun createCacheRequestAndReturn() {}
 
     abstract suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<NetworkDto>)
 
@@ -185,7 +185,7 @@ abstract class NetworkBoundResource<NetworkDto, CacheEntity, ViewStateType>
 
     abstract fun loadFromCache(): LiveData<ViewStateType>
 
-    abstract suspend fun updateLocalDb(cacheObject: CacheEntity?)
+    abstract suspend fun updateLocalDb(cacheObject: Model?)
 
     abstract fun setJob(job: Job)
 

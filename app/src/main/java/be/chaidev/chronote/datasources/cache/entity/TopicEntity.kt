@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data.cache.entity
+package be.chaidev.chronote.datasources.cache.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity

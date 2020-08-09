@@ -1,15 +1,15 @@
 package be.chaidev.chronote.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.chaidev.chronote.ui.mvi.DataState
+import be.chaidev.chronote.util.Constants.TAG
 
 abstract class AbstractViewModel<StateEvent, ViewState> : ViewModel()
 {
-
-    val TAG: String = "AppDebug"
 
     protected val _stateEvent: MutableLiveData<StateEvent> = MutableLiveData()
     protected val _viewState: MutableLiveData<ViewState> = MutableLiveData()
@@ -29,6 +29,7 @@ abstract class AbstractViewModel<StateEvent, ViewState> : ViewModel()
     }
 
     fun getCurrentViewStateOrNew(): ViewState{
+        Log.d(TAG, "getCurrentViewStateOrNew")
         val value = viewState.value?.let{
             it
         }?: initNewViewState()

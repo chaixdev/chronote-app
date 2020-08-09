@@ -1,4 +1,4 @@
-package be.chaidev.chronote.data
+package be.chaidev.chronote.datasources
 
 import androidx.room.TypeConverter
 import be.chaidev.chronote.model.Type

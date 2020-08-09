@@ -3,7 +3,7 @@ package be.chaidev.chronote.testutil
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import be.chaidev.chronote.data.cache.AppDatabase
+import be.chaidev.chronote.datasources.cache.AppDatabase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

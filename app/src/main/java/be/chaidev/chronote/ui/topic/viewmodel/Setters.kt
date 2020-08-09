@@ -70,8 +70,15 @@ fun TopicBrowserViewModel.updateListItem(newTopic: Topic){
 }
 
 @ExperimentalCoroutinesApi
-fun TopicBrowserViewModel.onBlogPostUpdateSuccess(topic: Topic){
+fun TopicBrowserViewModel.onBlogPostUpdateSuccess(topic: Topic) {
     setUpdatedTopic(topic) // update update Fragment (not really necessary since navigating back)
     setTopic(topic) // update detail Fragment
     updateListItem(topic) // update list
+}
+
+@ExperimentalCoroutinesApi
+fun TopicBrowserViewModel.setQueryInProgress(isInProgress: Boolean) {
+    val update = getCurrentViewStateOrNew()
+    update.topicBrowser.isQueryInProgress = isInProgress
+    setViewState(update)
 }

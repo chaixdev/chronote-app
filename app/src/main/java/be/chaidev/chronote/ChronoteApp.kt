@@ -4,9 +4,6 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class ChronoteApp: Application() {
+open class ChronoteApp : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

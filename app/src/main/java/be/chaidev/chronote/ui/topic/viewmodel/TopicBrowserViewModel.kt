@@ -1,6 +1,7 @@
 package be.chaidev.chronote.ui.topic.viewmodel
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import be.chaidev.chronote.repository.TopicsRepository
@@ -10,6 +11,7 @@ import be.chaidev.chronote.ui.mvi.DataState
 import be.chaidev.chronote.ui.topic.state.TopicStateEvent
 import be.chaidev.chronote.ui.topic.state.TopicStateEvent.*
 import be.chaidev.chronote.ui.topic.state.TopicViewState
+import be.chaidev.chronote.util.Constants.TAG
 import be.chaidev.chronote.util.SharedPreferenceKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -23,31 +25,32 @@ internal constructor(
 ) : AbstractViewModel<TopicStateEvent, TopicViewState>() {
 
     override fun handleStateEvent(stateEvent: TopicStateEvent): LiveData<DataState<TopicViewState>> {
+
         when (stateEvent) {
             is LoadTopicsEvent -> {
-                //todo: implement
-                return AbsentLiveData.create()
-
+                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: LoadTopicsEvent}")
+                return topicsRepository.getTopics()
             }
 
             is DeleteTopicEvent -> {
-
-                //todo: implement
-                return AbsentLiveData.create()
+                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: DeleteTopicEvent}")
+                return topicsRepository.deleteTopic(topic = getTopic())
             }
 
             is UpdateTopicEvent -> {
-                //todo: implement
+                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: UpdateTopicEvent}")
                 return AbsentLiveData.create()
             }
 
             is None -> {
+                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: None}")
                 return AbsentLiveData.create()
             }
         }
     }
 
     override fun initNewViewState(): TopicViewState {
+        Log.d(TAG, "TopicBrowserViewModel init new view state")
         return TopicViewState()
     }
 
@@ -60,7 +63,7 @@ internal constructor(
     }
 
     fun cancelActiveJobs() {
-//        topicsRepository.cancelActiveJobs() // cancel active jobs
+        topicsRepository.cancelActiveJobs() // cancel active jobs
         handlePendingData() // hide progress bar
     }
 
@@ -73,4 +76,16 @@ internal constructor(
         cancelActiveJobs()
     }
 
+    fun resetPage() {
+        val update = getCurrentViewStateOrNew()
+        setViewState(update)
+    }
+
+    fun loadTopics() {
+        Log.d(TAG, "TopicViewModel: Attempting to load topics")
+        setQueryInProgress(true)
+        resetPage()
+        setStateEvent(LoadTopicsEvent())
+
+    }
 }

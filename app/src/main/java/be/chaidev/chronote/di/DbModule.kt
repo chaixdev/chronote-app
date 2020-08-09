@@ -2,8 +2,8 @@ package be.chaidev.chronote.di
 
 import android.content.Context
 import androidx.room.Room
-import be.chaidev.chronote.data.cache.AppDatabase
-import be.chaidev.chronote.data.cache.dao.TopicDao
+import be.chaidev.chronote.datasources.cache.AppDatabase
+import be.chaidev.chronote.datasources.cache.dao.TopicDao
 import be.chaidev.chronote.util.Constants
 import dagger.Module
 import dagger.Provides

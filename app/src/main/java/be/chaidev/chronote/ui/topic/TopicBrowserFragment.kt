@@ -4,15 +4,14 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import be.chaidev.chronote.R
 import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.ui.topic.viewmodel.setTopic
+import be.chaidev.chronote.ui.topic.viewmodel.setTopicListData
 import be.chaidev.chronote.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.topic_browser_fragment.*
@@ -22,29 +21,44 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class TopicBrowserFragment:
     TopicFragment(R.layout.topic_browser_fragment),
-    TopicBrowserListAdapter.Interaction,
-    SwipeRefreshLayout.OnRefreshListener
+    TopicBrowserListAdapter.Interaction
 {
 
     private lateinit var recyclerAdapter : TopicBrowserListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        Log.d(TAG, "TopicBrowserFragment  onViewCreated()")
+
         setHasOptionsMenu(true)
-        swipe_refresh.setOnRefreshListener(this)
 
         initRecyclerView()
         subscribeObservers()
+        viewModel.loadTopics()
+
     }
 
-    private fun subscribeObservers(){
-        viewModel.dataState.observe(viewLifecycleOwner, Observer{ dataState ->
-            if(dataState != null) {
+    private fun subscribeObservers() {
+        Log.d(TAG, "TopicBrowserFragment  subscribeObservers()")
+        // observe the datastate (state of data that backs the view)
+        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
+            Log.d(TAG, "BlogFragment, ViewState: ${dataState}")
+            if (dataState != null) {
+                // let ui know something changed
                 stateChangeListener.onDataStateChange(dataState)
+
+                dataState.data?.let {
+                    it.data?.let { event ->
+                        event.getContentIfNotHandled()?.let {
+                            Log.d(TAG, "TopicFragment, datastate: $it")
+                            viewModel.setTopicListData(it.topicBrowser.topicsList)
+                        }
+                    }
+                }
             }
         })
-
+        // observe the viewstate (the actually displayed state)
         viewModel.viewState.observe(viewLifecycleOwner, Observer{ viewState ->
             Log.d(TAG, "BlogFragment, ViewState: ${viewState}")
             if(viewState != null){
@@ -53,20 +67,14 @@ class TopicBrowserFragment:
                         blogList = viewState.topicBrowser.topicsList
                     )
                 }
-
             }
         })
     }
 
-    override fun onRefresh() {
-        resetUI()
-        swipe_refresh.isRefreshing = false
-    }
-
     private fun initRecyclerView(){
-
+        Log.d(TAG, "TopicFragment, ViewState: initrecyclerview")
         topicBrowserList.apply {
-            layoutManager = LinearLayoutManager(this@TopicBrowserFragment.context)
+            layoutManager = LinearLayoutManager(activity)
             val topSpacingDecorator = TopSpacingItemDecoration(30)
             removeItemDecoration(topSpacingDecorator) // does nothing if not applied already
             addItemDecoration(topSpacingDecorator)
@@ -87,6 +95,7 @@ class TopicBrowserFragment:
 
     override fun onItemSelected(position: Int, item: Topic) {
         viewModel.setTopic(item)
+        Log.d(TAG, "item clicked:$position, topic:$item")
         findNavController().navigate(R.id.action_topicBrowserFragment_to_topicDetailFragment)
     }
 

@@ -1,19 +1,19 @@
-package be.chaidev.chronote.data.network.retrofit
+package be.chaidev.chronote.datasources.network.retrofit
 
-import be.chaidev.chronote.model.Subject
+import be.chaidev.chronote.datasources.network.dto.NoteDto
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
 
-class SubjectDeserializer: JsonDeserializer<Subject> {
+class NoteDeserializer: JsonDeserializer<NoteDto> {
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): Subject {
+    ): NoteDto {
 
-        return Gson().fromJson(json,Subject::class.java)
+        return Gson().fromJson(json,NoteDto::class.java)
     }
 }
