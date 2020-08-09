@@ -1,18 +1,13 @@
-package be.chaidev.chronote.data.network
+package be.chaidev.chronote.datasources.network
 
 import android.util.Log
+import be.chaidev.chronote.util.Constants.TAG
 import retrofit2.Response
 
-/**
- * Copied from Architecture components google sample:
- * https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/api/ApiResponse.kt
- */
 @Suppress("unused") // T is used in extending classes
 sealed class GenericApiResponse<T> {
 
     companion object {
-        private val TAG: String = "AppDebug"
-
 
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
             return ApiErrorResponse(
@@ -57,6 +52,6 @@ sealed class GenericApiResponse<T> {
  */
 class ApiEmptyResponse<T> : GenericApiResponse<T>()
 
-data class ApiSuccessResponse<T>(val body: T) : GenericApiResponse<T>() {}
+data class ApiSuccessResponse<T>(val body: T) : GenericApiResponse<T>()
 
 data class ApiErrorResponse<T>(val errorMessage: String) : GenericApiResponse<T>()

@@ -27,17 +27,17 @@ abstract class TopicFragment(fragmentResourceReference: Int) : Fragment(fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "TopicFragment, onCreated() ")
         setupActionBarWithNavController(R.id.topicBrowserFragment, activity as AppCompatActivity)
+        setHasOptionsMenu(true)
 
-        cancelActiveJobs()
-    }
-
-    fun cancelActiveJobs(){
         viewModel.cancelActiveJobs()
     }
 
+
     // here, fragmentId is id of fragment from graph to be EXCLUDED from action back bar nav
     fun setupActionBarWithNavController(fragmentId: Int, activity: AppCompatActivity){
+        Log.d(TAG, "abstract TopicFragment  setupActionBarWithNavController()")
         val appBarConfiguration = AppBarConfiguration(setOf(fragmentId))
         NavigationUI.setupActionBarWithNavController(
             activity,
@@ -48,6 +48,7 @@ abstract class TopicFragment(fragmentResourceReference: Int) : Fragment(fragment
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d(TAG, "abstract topicfragment onAttach()")
         try{
             stateChangeListener = context as DataStateChangeListener
         }catch(e: ClassCastException){

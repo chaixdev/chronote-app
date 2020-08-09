@@ -1,8 +1,8 @@
 package be.chaidev.chronote.di
 
 import android.app.Application
-import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.network.retrofit.StreamarksApi
+import be.chaidev.chronote.datasources.cache.dao.TopicDao
+import be.chaidev.chronote.datasources.network.retrofit.StreamarksApi
 import be.chaidev.chronote.repository.TopicsRepository
 import be.chaidev.chronote.system.Device
 import dagger.Module

@@ -3,10 +3,10 @@ package be.chaidev.chronote
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.cache.entity.NoteEntity
-import be.chaidev.chronote.data.cache.entity.TopicEntity
-import be.chaidev.chronote.data.cache.entity.TopicWithNotes
+import be.chaidev.chronote.datasources.cache.dao.TopicDao
+import be.chaidev.chronote.datasources.cache.entity.NoteEntity
+import be.chaidev.chronote.datasources.cache.entity.TopicEntity
+import be.chaidev.chronote.datasources.cache.entity.TopicWithNotes
 import be.chaidev.chronote.testutil.DbTest
 import be.chaidev.chronote.testutil.TestUtil.createTopic
 import be.chaidev.chronote.testutil.getOrAwaitValue

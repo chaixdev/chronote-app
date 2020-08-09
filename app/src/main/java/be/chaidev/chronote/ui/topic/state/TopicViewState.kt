@@ -14,7 +14,7 @@ class TopicViewState(
     var updatedTopic: UpdateTopic = UpdateTopic(),
 
     // state for viewTopic fragment
-    var viewTopic: UpdateTopic = UpdateTopic()
+    var viewTopic: ViewTopic = ViewTopic()
 
 ) : Parcelable {
 

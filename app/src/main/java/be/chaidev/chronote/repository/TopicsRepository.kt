@@ -1,17 +1,32 @@
 package be.chaidev.chronote.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import be.chaidev.chronote.data.cache.dao.TopicDao
-import be.chaidev.chronote.data.network.ApiSuccessResponse
-import be.chaidev.chronote.data.network.GenericApiResponse
-import be.chaidev.chronote.data.network.dto.TopicDto
-import be.chaidev.chronote.data.network.retrofit.StreamarksApi
+import androidx.lifecycle.asLiveData
+import be.chaidev.chronote.datasources.cache.dao.TopicDao
+import be.chaidev.chronote.datasources.cache.entity.NoteEntity
+import be.chaidev.chronote.datasources.cache.entity.TopicEntity
+import be.chaidev.chronote.datasources.cache.entity.TopicWithNotes
+import be.chaidev.chronote.datasources.network.ApiSuccessResponse
+import be.chaidev.chronote.datasources.network.GenericApiResponse
+import be.chaidev.chronote.datasources.network.dto.GenericResponse
+import be.chaidev.chronote.datasources.network.dto.TopicDto
+import be.chaidev.chronote.datasources.network.retrofit.StreamarksApi
 import be.chaidev.chronote.model.Topic
+import be.chaidev.chronote.repository.ResponseHandling.SUCCESS_TOPIC_DELETED
 import be.chaidev.chronote.system.Device
+import be.chaidev.chronote.ui.mvi.AbsentLiveData
 import be.chaidev.chronote.ui.mvi.DataState
+import be.chaidev.chronote.ui.mvi.Response
+import be.chaidev.chronote.ui.mvi.ResponseType
 import be.chaidev.chronote.ui.topic.state.TopicViewState
+import be.chaidev.chronote.util.Constants
+import be.chaidev.chronote.util.Constants.TAG
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -22,9 +37,9 @@ constructor(
     val api: StreamarksApi,
     val system: Device
 ) : JobManager("TopicsRepository") {
-    private val topics: List<Topic> = emptyList()
-    fun getTopics(filterAndOrder: String): LiveData<DataState<TopicViewState>> {
 
+    fun getTopics(): LiveData<DataState<TopicViewState>> {
+        Log.d(TAG, "TopicRepo getTopics")
         return object : NetworkBoundResource<List<TopicDto>, List<Topic>, TopicViewState>(
             system.isInternetAvailable(),
             true,
@@ -50,68 +65,85 @@ constructor(
             }
 
             override fun loadFromCache(): LiveData<TopicViewState> {
-                TODO()
-//                return topicsDao.returnOrderedQuery(filterAndOrder = filterAndOrder)
-//                    .switchMap {
-//                        object : LiveData<TopicViewState>() {
-//                            override fun onActive() {
-//                                super.onActive()
-//                                value = TopicViewState(
-//                                    TopicViewState.TopicBrowser(
-//                                        topicsList = it,
-//                                        isQueryInProgress = true
-//                                    )
-//                                )
-//                            }
-//                        }
-//                    }
+
+                return topicsDao.getTopicsWithNotes()
+                    .map {
+                        TopicViewState(
+                            TopicViewState.TopicBrowser(
+                                topicsList = it.map(TopicWithNotes::toTopic),
+                                isQueryInProgress = true
+                            )
+                        )
+                    }.asLiveData()
             }
 
             override suspend fun updateLocalDb(cacheObject: List<Topic>?) {
-                TODO()
-//                if(cacheObject != null){
-//                    withContext(IO){
-//                        for(topic in cacheObject){
-//                            try{
-//                                // new job for each element to insert (parallel)
-//                                launch{
-//                                    Log.d(Constants.TAG,"updating cache for topic ${topic.id}:${topic.subject.title}" )
-//                                    topicsDao.save(topic)
-//                                }
-//                            }catch(e: Exception){
-//                                Log.e(Constants.TAG,"Error while updating cache for topic id ${topic.id}" )
-//                            }
-//                        }
-//                    }
-//                }
-
+                if (cacheObject != null) {
+                    withContext(IO) {
+                        for (topic in cacheObject) {
+                            try {
+                                // new job for each element to insert (parallel)
+                                launch {
+                                    Log.d(Constants.TAG, "updating cache for topic ${topic.id}:${topic.subject.title}")
+                                    topicsDao.updateTopic(TopicEntity.fromTopic(topic))
+                                    topicsDao.updateNotes(NoteEntity.fromNotes(topic.notes, topic.id))
+                                }
+                            } catch (e: Exception) {
+                                Log.e(Constants.TAG, "Error while updating cache for topic id ${topic.id}")
+                            }
+                        }
+                    }
+                }
             }
 
             override fun setJob(job: Job) {
-                addJob("getTopics",job)
+                addJob("getTopics", job)
             }
 
         }.asLiveData()
-//        // caching strategy:
-//        // 1. 1st emit: 'loading' message
-//        emit(DataState.loading(true, ))
-//        // 2. 2nd emit: cached values if present.
-//        emit(DataState.data(cache.getAllTopics()))
-//        try {
-//            // 3. launch network query
-//            Log.d("network", "calling streamarksApi.getTopics()")
-//            val networkEntities = streamarksApi.getTopics()
-//            // 4. let cache handle caching strategy
-//            val topics = networkEntities.map(TopicDto::toTopic)
-//            for (topic in topics) {
-//                cache.saveTopic(topic)
-//            }
-//
-//            // 5. 3d emit: whatever is in cache
-//
-//            emit(DataState.Success(cache.getAllTopics()))
-//        } catch (e: Exception) {
-//            Log.e(this.javaClass.simpleName, "getTopics:  ",e)
-//            emit(DataState.Error(e))
+    }
+
+    fun deleteTopic(topic: Topic): LiveData<DataState<TopicViewState>> {
+        return object : NetworkBoundResource<GenericResponse, Topic, TopicViewState>(
+            system.isInternetAvailable(),
+            true,
+            true,
+            false
+        ) {
+
+            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<GenericResponse>) {
+                if (response.body.response == SUCCESS_TOPIC_DELETED) {
+                    updateLocalDb(topic)
+                }
+
+
+            }
+
+            override fun createCall(): LiveData<GenericApiResponse<GenericResponse>> {
+                return api.deleteTopic(topic.id)
+            }
+
+            override fun loadFromCache(): LiveData<TopicViewState> {
+                return AbsentLiveData.create()
+            }
+
+            override suspend fun updateLocalDb(cacheObject: Topic?) {
+                cacheObject?.let { topic ->
+                    topicsDao.deleteNotes(NoteEntity.fromNotes(topic.notes, topic.id))
+                    topicsDao.deleteTopic(TopicEntity.fromTopic(topic))
+                    onCompleteJob(
+                        DataState.data(
+                            null,
+                            Response(SUCCESS_TOPIC_DELETED, ResponseType.Toast())
+                        )
+                    )
+                }
+            }
+
+            override fun setJob(job: Job) {
+                addJob("deleteTopic", job)
+            }
+
+        }.asLiveData()
     }
 }

@@ -1,6 +1,6 @@
 package be.chaidev.chronote.testutil
 
-import be.chaidev.chronote.data.cache.entity.TopicEntity
+import be.chaidev.chronote.datasources.cache.entity.TopicEntity
 import be.chaidev.chronote.model.Note
 import be.chaidev.chronote.model.Subject
 import be.chaidev.chronote.model.Topic

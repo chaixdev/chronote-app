@@ -43,6 +43,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == "androidx") {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion "${targetSdk}.+"
+                }
+            }
+        }}
 }
 
 dependencies {
@@ -86,6 +95,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
 
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.8.1"
+    androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 
     // -------- MOCKITO
     def mockito_version = "2.25.0"
@@ -101,6 +112,7 @@ dependencies {
     // retrofit
     implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.9.0'
     implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.9.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
 
     // uuid helper
     implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.8'

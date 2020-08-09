@@ -5,18 +5,21 @@ import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.model.Type
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.Instant
+
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getFilter(): String {
     getCurrentViewStateOrNew().let {
         return it.topicBrowser.tagFilter
     }
 }
+
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getOrder(): String {
     getCurrentViewStateOrNew().let {
         return it.topicBrowser.order
     }
 }
+
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getTopic(): Topic {
     getCurrentViewStateOrNew().let {
@@ -25,6 +28,7 @@ fun TopicBrowserViewModel.getTopic(): Topic {
         } ?: getDummyTopic()
     }
 }
+
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getDummyTopic(): Topic {
     return Topic(
