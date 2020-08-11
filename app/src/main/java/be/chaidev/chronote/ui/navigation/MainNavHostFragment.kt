@@ -1,4 +1,4 @@
-package be.chaidev.chronote.navigation
+package be.chaidev.chronote.ui.navigation
 
 import android.content.Context
 import android.util.Log
