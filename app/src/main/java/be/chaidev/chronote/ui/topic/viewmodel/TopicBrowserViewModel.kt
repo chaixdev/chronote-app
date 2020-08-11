@@ -2,8 +2,10 @@ package be.chaidev.chronote.ui.topic.viewmodel
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import be.chaidev.chronote.repository.TopicsRepository
 import be.chaidev.chronote.ui.AbstractViewModel
 import be.chaidev.chronote.ui.mvi.AbsentLiveData
@@ -19,6 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class TopicBrowserViewModel
 @ViewModelInject
 internal constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
     private val topicsRepository: TopicsRepository,
     private val sharedPreferences: SharedPreferences,
     private val editor: SharedPreferences.Editor
