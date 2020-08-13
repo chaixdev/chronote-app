@@ -1,4 +1,4 @@
-package be.chaidev.chronote.datasources.network.dto
+package be.chaidev.chronote.datasources.api.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

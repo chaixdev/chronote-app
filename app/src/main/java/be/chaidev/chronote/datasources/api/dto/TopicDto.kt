@@ -1,5 +1,6 @@
-package be.chaidev.chronote.datasources.network.dto
+package be.chaidev.chronote.datasources.api.dto
 
+import be.chaidev.chronote.model.Note
 import be.chaidev.chronote.model.Subject
 import be.chaidev.chronote.model.Topic
 import com.google.gson.annotations.Expose
@@ -36,15 +37,15 @@ data class TopicDto(
 ) {
 
     companion object {
-        fun fromTopic(topic: TopicDto): TopicDto {
+        fun fromTopic(topic: Topic): TopicDto {
 
             return TopicDto(
                 topic.id,
                 topic.subject,
                 topic.tags,
-                topic.dateCreated,
-                topic.dateModified,
-                topic.notes
+                topic.dateCreated.toString(),
+                topic.dateModified.toString(),
+                topic.notes.map(NoteDto.Companion::fromNote)
             )
         }
     }
@@ -58,5 +59,9 @@ data class TopicDto(
             Instant.parse(dateModified),
             notes.map(NoteDto::toNote)
         )
+    }
+
+    fun parsedNotes(): List<Note> {
+        return notes.map { noteDto -> noteDto.toNote() }
     }
 }

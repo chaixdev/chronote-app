@@ -1,4 +1,4 @@
-package be.chaidev.chronote.datasources.network.dto
+package be.chaidev.chronote.datasources.api.dto
 
 import be.chaidev.chronote.model.Note
 import com.google.gson.annotations.Expose
@@ -25,13 +25,15 @@ data class NoteDto(
         )
     }
 
-    fun fromNote(note: Note): NoteDto {
-
-        return NoteDto(
-            note.id,
-            note.body,
-            note.time
-        )
+    companion object {
+        @JvmStatic
+        fun fromNote(note: Note): NoteDto {
+            return NoteDto(
+                note.id,
+                note.body,
+                note.time
+            )
+        }
     }
-}
 
+}

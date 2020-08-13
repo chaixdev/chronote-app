@@ -1,4 +1,4 @@
-package be.chaidev.chronote.datasources.network
+package be.chaidev.chronote.datasources.api
 
 import android.util.Log
 import be.chaidev.chronote.util.Constants.TAG
