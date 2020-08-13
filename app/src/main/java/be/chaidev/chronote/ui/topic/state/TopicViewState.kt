@@ -20,10 +20,10 @@ class TopicViewState(
 
     @Parcelize
     data class TopicBrowser(
-        var topicsList: List<Topic> = ArrayList(),
-        var isQueryInProgress: Boolean = true,
-        var order: String = "",
-        var tagFilter: String = ""
+        var topicListData: List<Topic>? = null,
+        var isQueryInProgress: Boolean? = null,
+        var order: String? = null,
+        var tagFilter: String? = null
 
     ) : Parcelable
 

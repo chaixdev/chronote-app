@@ -23,4 +23,6 @@
     <string name="newTopic">new topic</string>
     <string name="addTopic">add topic</string>
     <string name="new_topic_description">add a new topic</string>
+    <string name="home">Home</string>
+    <string name="create">Create</string>
 </resources>

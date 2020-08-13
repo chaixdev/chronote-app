@@ -10,4 +10,12 @@ object Constants {
     const val TESTING_NETWORK_DELAY = 0L // fake network delay for testing
     const val TESTING_CACHE_DELAY = 0L // fake cache delay for testing
 
+    const val TOPIC_ORDER_ASC: String = ""
+    const val TOPIC_ORDER_DESC: String = "-"
+
+
+    const val MESSAGE_STACK_BUNDLE_KEY = "be.chaidev.chronote.ui.mvi.MessageStack"
+    const val TOPIC_VIEW_STATE_BUNDLE_KEY = "be.chaidev.chronote.ui.topic.state.TopicViewState"
+    const val PERMISSIONS_REQUEST_READ_STORAGE: Int = 301
+
 }

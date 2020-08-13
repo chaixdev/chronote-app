@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.topic.fragments.TopicListFragment"
+    tools:context=".ui.topic.fragments.TopicBrowserFragment"
     tools:listitem="@layout/layout_topic_list_item" />

@@ -1,117 +1,116 @@
 package be.chaidev.chronote.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import android.view.MenuItem
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import be.chaidev.chronote.R
-import be.chaidev.chronote.ui.mvi.*
-import be.chaidev.chronote.util.Constants
+import be.chaidev.chronote.ui.mvi.BaseActivity
+import be.chaidev.chronote.ui.navigation.BOTTOM_NAV_BACKSTACK_KEY
+import be.chaidev.chronote.ui.navigation.BottomNavController
+import be.chaidev.chronote.ui.navigation.setUpNavigation
+import be.chaidev.chronote.ui.topic.fragments.TopicBrowserFragment
+import be.chaidev.chronote.ui.topic.fragments.TopicDetailFragment
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.FlowPreview
 
-
-/**
- * Main activity of the application.
- *
- * Container for the Buttons & Logs fragments. This activity simply tracks clicks on buttons.
- */
 @ExperimentalCoroutinesApi
+@FlowPreview
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), DataStateChangeListener {
+class MainActivity : BaseActivity(),
+    BottomNavController.OnNavigationReselectedListener {
+    private lateinit var bottomNavigationView: BottomNavigationView
+
+    private val bottomNavController by lazy(LazyThreadSafetyMode.NONE) {
+        BottomNavController(
+            this,
+            R.id.main_fragment_container,
+            R.id.menu_nav_topic_browser
+        )
+    }
+
+
+    override fun onReselectNavItem(
+        navController: NavController,
+        fragment: Fragment
+    ) {
+        Log.d(TAG, "logInfo: onReSelectItem")
+        when (fragment) {
+
+            is TopicBrowserFragment -> {
+                navController.navigate(R.id.action_topicDetail_to_topicBrowser)
+            }
+
+            is TopicDetailFragment -> {
+                navController.navigate(R.id.action_topicBrowser_to_topicDetail)
+            }
+            else -> {
+                // do nothing
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.MainTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setupActionBar()
+        setupBottomNavigationView(savedInstanceState)
     }
 
-
-    override fun onDataStateChange(dataState: DataState<*>?) {
-        dataState?.let {
-            GlobalScope.launch(Dispatchers.Main) {
-                displayProgressBar(it.loading.isLoading)
-
-                it.error?.let { errorEvent ->
-                    handleStateError(errorEvent)
-                }
-
-                it.data?.let {
-                    it.response?.let { responseEvent ->
-                        handleStateResponse(responseEvent)
-                    }
-                }
+    private fun setupBottomNavigationView(savedInstanceState: Bundle?) {
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view)
+        bottomNavigationView.setUpNavigation(bottomNavController, this)
+        if (savedInstanceState == null) {
+            bottomNavController.setupBottomNavigationBackStack(null)
+            bottomNavController.onNavigationItemSelected()
+        } else {
+            (savedInstanceState[BOTTOM_NAV_BACKSTACK_KEY] as IntArray?)?.let { items ->
+                val backstack = BottomNavController.BackStack()
+                backstack.addAll(items.toTypedArray())
+                bottomNavController.setupBottomNavigationBackStack(backstack)
             }
         }
     }
 
-    override fun hideSoftKeyboard() {
-        if (currentFocus != null) {
-            val inputMethodManager = getSystemService(
-                Context.INPUT_METHOD_SERVICE
-            ) as InputMethodManager
-            inputMethodManager
-                .hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // save backstack for bottom nav
+        outState.putIntArray(BOTTOM_NAV_BACKSTACK_KEY, bottomNavController.navigationBackStack.toIntArray())
     }
 
-    fun displayProgressBar(bool: Boolean) {
-        Log.d(Constants.TAG, "displayProgressBar")
-
-//        if(bool){
-//            progress_bar.visibility = View.VISIBLE
-//        }
-//        else{
-//            progress_bar.visibility = View.GONE
-//        }
+    override fun expandAppBar() {
+        findViewById<AppBarLayout>(R.id.app_bar).setExpanded(true)
     }
 
-    private fun handleStateError(event: Event<StateError>) {
-        event.getContentIfNotHandled()?.let {
-            when (it.response.responseType) {
-                is ResponseType.Toast -> {
-                    it.response.message?.let { message ->
-                        displayToast(message)
-                    }
-                }
+    override fun onBackPressed() = bottomNavController.onBackPressed()
 
-                is ResponseType.Dialog -> {
-                    it.response.message?.let { message ->
-                        displayErrorDialog(message)
-                    }
-                }
-
-                is ResponseType.None -> {
-                    Log.i(Constants.TAG, "handleStateError: ${it.response.message}")
-                }
-            }
-        }
+    private fun setupActionBar() {
+        setSupportActionBar(tool_bar)
     }
 
-    private fun handleStateResponse(event: Event<Response>) {
-        event.getContentIfNotHandled()?.let {
-
-            when (it.responseType) {
-                is ResponseType.Toast -> {
-                    it.message?.let { message ->
-                        displayToast(message)
-                    }
-                }
-
-                is ResponseType.Dialog -> {
-                    it.message?.let { message ->
-                        displaySuccessDialog(message)
-                    }
-                }
-
-                is ResponseType.None -> {
-                    Log.i(Constants.TAG, "handleStateResponse: ${it.message}")
-                }
-            }
+    override fun displayProgressBar(isLoading: Boolean) {
+        if (isLoading) {
+            progress_bar.visibility = View.VISIBLE
+        } else {
+            progress_bar.visibility = View.GONE
         }
     }
 }

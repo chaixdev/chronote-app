@@ -3,24 +3,16 @@ package be.chaidev.chronote.ui.mvi
 
 interface UICommunicationListener {
 
-    fun onUIMessageReceived(uiMessage: UIMessage)
-}
+    fun onResponseReceived(
+        response: Response,
+        stateMessageCallback: StateMessageCallback
+    )
 
+    fun expandAppBar()
 
-data class UIMessage(
-    val message: String,
-    val uiMessageType: UIMessageType
-)
+    fun displayProgressBar(isLoading: Boolean)
 
-sealed class UIMessageType{
+    fun hideSoftKeyboard()
 
-    class Toast: UIMessageType()
-
-    class Dialog: UIMessageType()
-
-    class AreYouSureDialog(
-        val callback: AreYouSureCallback
-    ): UIMessageType()
-
-    class None: UIMessageType()
+    fun isStoragePermissionGranted(): Boolean
 }

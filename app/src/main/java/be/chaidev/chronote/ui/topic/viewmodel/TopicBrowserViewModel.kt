@@ -1,22 +1,21 @@
 package be.chaidev.chronote.ui.topic.viewmodel
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import be.chaidev.chronote.repository.TopicsRepository
 import be.chaidev.chronote.ui.AbstractViewModel
-import be.chaidev.chronote.ui.mvi.AbsentLiveData
-import be.chaidev.chronote.ui.mvi.DataState
-import be.chaidev.chronote.ui.topic.state.TopicStateEvent
+import be.chaidev.chronote.ui.mvi.*
 import be.chaidev.chronote.ui.topic.state.TopicStateEvent.*
 import be.chaidev.chronote.ui.topic.state.TopicViewState
-import be.chaidev.chronote.util.Constants.TAG
-import be.chaidev.chronote.util.SharedPreferenceKeys
+import be.chaidev.chronote.util.ErrorHandling.Companion.INVALID_STATE_EVENT
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class TopicBrowserViewModel
 @ViewModelInject
@@ -25,70 +24,74 @@ internal constructor(
     private val topicsRepository: TopicsRepository,
     private val sharedPreferences: SharedPreferences,
     private val editor: SharedPreferences.Editor
-) : AbstractViewModel<TopicStateEvent, TopicViewState>() {
+) : AbstractViewModel<TopicViewState>() {
 
-    override fun handleStateEvent(stateEvent: TopicStateEvent): LiveData<DataState<TopicViewState>> {
+    override fun handleNewData(data: TopicViewState) {
 
-        when (stateEvent) {
-            is LoadTopicsEvent -> {
-                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: LoadTopicsEvent}")
-                return topicsRepository.getTopics()
+        data.topicBrowser.let { topicBrowser ->
+
+            topicBrowser.topicListData?.let { listData ->
+                setTopicListData(listData)
             }
+        }
 
-            is DeleteTopicEvent -> {
-                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: DeleteTopicEvent}")
-                return topicsRepository.deleteTopic(topic = getTopic())
+        data.viewTopic.let { viewTopic ->
+
+            viewTopic.topic?.let { topic ->
+                setTopic(topic)
             }
+        }
 
-            is UpdateTopicEvent -> {
-                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: UpdateTopicEvent}")
-                return AbsentLiveData.create()
-            }
-
-            is None -> {
-                Log.d(TAG, "TopicBrowserViewModel handleStateEvent: None}")
-                return AbsentLiveData.create()
+        data.updatedTopic.let { updatedBlogFields ->
+            updatedBlogFields.topic?.let { topic ->
+                setTopic(topic)
             }
         }
     }
 
+
+    override fun setStateEvent(stateEvent: StateEvent) {
+        if (!isJobAlreadyActive(stateEvent)) {
+
+            val job: Flow<DataState<TopicViewState>> = when (stateEvent) {
+
+                is LoadTopicsEvent -> {
+                    topicsRepository.getTopics(
+                        stateEvent = stateEvent
+                    )
+                }
+
+                is DeleteTopicEvent -> {
+                    topicsRepository.deleteTopic(stateEvent.topic, stateEvent)
+                }
+
+                is UpdateTopicEvent -> {
+                    topicsRepository.updateTopic(
+                        stateEvent.topic,
+                        stateEvent
+                    )
+                }
+
+                else -> {
+                    flow {
+                        emit(
+                            DataState.error(
+                                response = Response(
+                                    message = INVALID_STATE_EVENT,
+                                    uiComponentType = UIComponentType.None(),
+                                    messageType = MessageType.Error()
+                                ),
+                                stateEvent = stateEvent
+                            )
+                        )
+                    }
+                }
+            }
+            launchJob(stateEvent, job)
+        }
+    }
+
     override fun initNewViewState(): TopicViewState {
-        Log.d(TAG, "TopicBrowserViewModel init new view state")
         return TopicViewState()
-    }
-
-    fun saveFilterOptions(filter: String, order: String) {
-        editor.putString(SharedPreferenceKeys.TOPIC_BROWSER_FILTER, filter)
-        editor.apply()
-
-        editor.putString(SharedPreferenceKeys.TOPIC_BROWSER_ORDER, order)
-        editor.apply()
-    }
-
-    fun cancelActiveJobs() {
-        topicsRepository.cancelActiveJobs() // cancel active jobs
-        handlePendingData() // hide progress bar
-    }
-
-    fun handlePendingData() {
-        setStateEvent(None())
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        cancelActiveJobs()
-    }
-
-    fun resetPage() {
-        val update = getCurrentViewStateOrNew()
-        setViewState(update)
-    }
-
-    fun loadTopics() {
-        Log.d(TAG, "TopicViewModel: Attempting to load topics")
-        setQueryInProgress(true)
-        resetPage()
-        setStateEvent(LoadTopicsEvent())
-
     }
 }
