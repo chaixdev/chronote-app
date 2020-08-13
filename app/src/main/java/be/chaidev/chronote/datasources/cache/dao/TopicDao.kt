@@ -4,34 +4,33 @@ import androidx.room.*
 import be.chaidev.chronote.datasources.cache.entity.NoteEntity
 import be.chaidev.chronote.datasources.cache.entity.TopicEntity
 import be.chaidev.chronote.datasources.cache.entity.TopicWithNotes
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TopicDao {
 
     // Insert
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTopic( topics: TopicEntity)
+    suspend fun insertTopic(topics: TopicEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNotes(notes :List<NoteEntity>)
+    suspend fun insertNotes(notes: List<NoteEntity>)
 
     // Read one
     @Transaction
     @Query("SELECT * FROM topics WHERE id=:topicId")
-    fun getTopicsWithNotes(topicId: String): Flow<TopicWithNotes>
+    suspend fun getTopicsWithNotes(topicId: String): TopicWithNotes
 
     // Read many
     @Transaction
     @Query("SELECT * FROM topics")
-    fun getTopicsWithNotes(): Flow<List<TopicWithNotes>>
+    suspend fun getTopicsWithNotes(): List<TopicWithNotes>
 
     // Update
     @Update
-    fun updateTopic(topic: TopicEntity)
+    suspend fun updateTopic(topic: TopicEntity)
 
     @Update
-    fun updateNotes(notes: List<NoteEntity>)
+    suspend fun updateNotes(notes: List<NoteEntity>)
 
     // delete
     @Delete
