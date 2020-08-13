@@ -1,10 +1,10 @@
-package be.chaidev.chronote.ui.mvi
+package be.chaidev.chronote.ui
 
 import android.app.Activity
-import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
 import be.chaidev.chronote.R
+import be.chaidev.chronote.ui.mvi.AreYouSureCallback
 import com.afollestad.materialdialogs.MaterialDialog
 
 
@@ -56,15 +56,5 @@ fun Activity.areYouSureDialog(message: String, callback: AreYouSureCallback){
             }
         }
 }
-
-
-interface AreYouSureCallback {
-
-    fun proceed()
-
-    fun cancel()
-}
-
-
 
 

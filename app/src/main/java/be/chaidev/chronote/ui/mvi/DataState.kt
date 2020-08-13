@@ -1,59 +1,40 @@
 package be.chaidev.chronote.ui.mvi
 
 
-
 data class DataState<T>(
-    var error: Event<StateError>? = null,
-    var loading: Loading = Loading(
-        false
-    ),
-    var data: Data<T>? = null
+    var stateMessage: StateMessage? = null,
+    var data: T? = null,
+    var stateEvent: StateEvent? = null
 ) {
 
     companion object {
 
         fun <T> error(
-            response: Response
+            response: Response,
+            stateEvent: StateEvent?
         ): DataState<T> {
             return DataState(
-                error = Event(
-                    StateError(
-                        response
-                    )
+                stateMessage = StateMessage(
+                    response
                 ),
-                loading = Loading(false),
-                data = null
-            )
-        }
-
-        fun <T> loading(
-            isLoading: Boolean,
-            cachedData: T? = null
-        ): DataState<T> {
-            return DataState(
-                error = null,
-                loading = Loading(isLoading),
-                data = Data(
-                    Event.dataEvent(
-                        cachedData
-                    ), null
-                )
+                data = null,
+                stateEvent = stateEvent
             )
         }
 
         fun <T> data(
+            response: Response?,
             data: T? = null,
-            response: Response? = null
+            stateEvent: StateEvent?
         ): DataState<T> {
             return DataState(
-                error = null,
-                loading = Loading(false),
-                data = Data(
-                    Event.dataEvent(data),
-                    Event.responseEvent(
-                        response
+                stateMessage = response?.let {
+                    StateMessage(
+                        it
                     )
-                )
+                },
+                data = data,
+                stateEvent = stateEvent
             )
         }
     }
