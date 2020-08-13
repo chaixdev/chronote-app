@@ -1,4 +1,4 @@
-package be.chaidev.chronote.datasources.network.retrofit
+package be.chaidev.chronote.datasources.api.retrofit
 
 import be.chaidev.chronote.model.Subject
 import com.google.gson.Gson

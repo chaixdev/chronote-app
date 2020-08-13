@@ -1,6 +1,6 @@
-package be.chaidev.chronote.datasources.network.retrofit
+package be.chaidev.chronote.datasources.api.retrofit
 
-import be.chaidev.chronote.datasources.network.dto.NoteDto
+import be.chaidev.chronote.datasources.api.dto.NoteDto
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
