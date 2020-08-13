@@ -6,6 +6,7 @@ object Constants {
     const val DATABASE_NAME = "chronote_db"
 
     const val NETWORK_TIMEOUT = 600000L
+    const val CACHE_TIMEOUT = 600000L
     const val TESTING_NETWORK_DELAY = 0L // fake network delay for testing
     const val TESTING_CACHE_DELAY = 0L // fake cache delay for testing
 

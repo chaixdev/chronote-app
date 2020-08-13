@@ -1,10 +1,9 @@
 package be.chaidev.chronote.di
 
-import be.chaidev.chronote.datasources.network.dto.NoteDto
-import be.chaidev.chronote.datasources.network.retrofit.LiveDataCallAdapterFactory
-import be.chaidev.chronote.datasources.network.retrofit.NoteDeserializer
-import be.chaidev.chronote.datasources.network.retrofit.StreamarksApi
-import be.chaidev.chronote.datasources.network.retrofit.SubjectDeserializer
+import be.chaidev.chronote.datasources.api.dto.NoteDto
+import be.chaidev.chronote.datasources.api.retrofit.NoteDeserializer
+import be.chaidev.chronote.datasources.api.retrofit.StreamarksApi
+import be.chaidev.chronote.datasources.api.retrofit.SubjectDeserializer
 import be.chaidev.chronote.model.Subject
 import be.chaidev.chronote.util.Constants
 import be.chaidev.chronote.util.Constants.STREAMARKS_URL
@@ -44,7 +43,6 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(STREAMARKS_URL)
             .client(client)
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
 
