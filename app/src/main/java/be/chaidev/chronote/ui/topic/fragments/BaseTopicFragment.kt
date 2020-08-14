@@ -15,13 +15,16 @@ import be.chaidev.chronote.R
 import be.chaidev.chronote.ui.mvi.UICommunicationListener
 import be.chaidev.chronote.ui.topic.viewmodel.TopicBrowserViewModel
 import be.chaidev.chronote.util.Constants.TAG
+import kotlinx.coroutines.FlowPreview
 
 
+@FlowPreview
 abstract class BaseTopicFragment(
     layoutResId: Int
 ) : Fragment(layoutResId) {
 
-    private val viewModel: TopicBrowserViewModel by viewModels()
+
+    protected val viewModel: TopicBrowserViewModel by viewModels()
 
 
     lateinit var uiCommunicationListener: UICommunicationListener

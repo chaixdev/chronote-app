@@ -31,7 +31,9 @@
             android:name="be.chaidev.chronote.ui.navigation.MainNavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/bottom_nav_height" />
+            android:layout_marginBottom="@dimen/bottom_nav_height"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/main_nav" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
