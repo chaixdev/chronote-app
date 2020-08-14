@@ -31,6 +31,7 @@ abstract class DataChannelManager<ViewState> {
 
     abstract fun handleNewData(data: ViewState)
 
+    // takes kotlin coroutine Flows as individual jobs
     fun launchJob(
         stateEvent: StateEvent,
         jobFunction: Flow<DataState<ViewState>?>

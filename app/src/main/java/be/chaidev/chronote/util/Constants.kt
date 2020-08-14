@@ -18,4 +18,6 @@ object Constants {
     const val TOPIC_VIEW_STATE_BUNDLE_KEY = "be.chaidev.chronote.ui.topic.state.TopicViewState"
     const val PERMISSIONS_REQUEST_READ_STORAGE: Int = 301
 
+
+    //test
 }

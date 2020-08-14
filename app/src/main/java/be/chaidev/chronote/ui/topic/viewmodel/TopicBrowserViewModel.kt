@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.flow
 @ExperimentalCoroutinesApi
 class TopicBrowserViewModel
 @ViewModelInject
-internal constructor(
+constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     private val topicsRepository: TopicsRepository,
     private val sharedPreferences: SharedPreferences,
