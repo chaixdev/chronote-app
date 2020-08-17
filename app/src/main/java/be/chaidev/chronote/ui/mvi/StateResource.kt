@@ -19,10 +19,6 @@ sealed class UIComponentType {
 
     class Dialog : UIComponentType()
 
-    class AreYouSureDialog(
-        val callback: AreYouSureCallback
-    ) : UIComponentType()
-
     class None : UIComponentType()
 }
 

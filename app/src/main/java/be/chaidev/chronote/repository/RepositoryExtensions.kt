@@ -4,7 +4,9 @@ import be.chaidev.chronote.datasources.api.ApiResult
 import be.chaidev.chronote.datasources.api.ApiResult.GenericError
 import be.chaidev.chronote.datasources.api.ApiResult.Success
 import be.chaidev.chronote.datasources.cache.CacheResult
-import be.chaidev.chronote.ui.mvi.*
+import be.chaidev.chronote.ui.mvi.DataState
+import be.chaidev.chronote.ui.mvi.StateEvent
+import be.chaidev.chronote.ui.mvi.UIComponentType
 import be.chaidev.chronote.util.Constants
 import be.chaidev.chronote.util.Constants.NETWORK_TIMEOUT
 import be.chaidev.chronote.util.ErrorHandling.Companion.CACHE_ERROR_TIMEOUT
@@ -87,14 +89,10 @@ suspend fun <T> safeCacheCall(
 fun <ViewState> buildError(
     message: String,
     uiComponentType: UIComponentType,
-    stateEvent: StateEvent?
+    stateEvent: StateEvent
 ): DataState<ViewState> {
     return DataState.error(
-        response = Response(
-            message = "${stateEvent?.errorInfo()}\n\nReason: ${message}",
-            uiComponentType = uiComponentType,
-            messageType = MessageType.Error()
-        ),
+        errorMessage = "${stateEvent.errorInfo()}\n\nReason: ${message}",
         stateEvent = stateEvent
     )
 

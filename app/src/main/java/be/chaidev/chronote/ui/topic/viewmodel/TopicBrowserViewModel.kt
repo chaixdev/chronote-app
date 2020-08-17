@@ -1,97 +1,117 @@
 package be.chaidev.chronote.ui.topic.viewmodel
 
-import android.content.SharedPreferences
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.*
 import be.chaidev.chronote.repository.TopicsRepository
-import be.chaidev.chronote.ui.AbstractViewModel
-import be.chaidev.chronote.ui.mvi.*
-import be.chaidev.chronote.ui.topic.state.TopicStateEvent.*
+import be.chaidev.chronote.ui.mvi.DataState
+import be.chaidev.chronote.ui.mvi.StateEvent
+import be.chaidev.chronote.ui.topic.state.TopicStateEvent
+import be.chaidev.chronote.ui.topic.state.TopicStateEvent.LoadTopicsEvent
 import be.chaidev.chronote.ui.topic.state.TopicViewState
-import be.chaidev.chronote.util.ErrorHandling.Companion.INVALID_STATE_EVENT
+import be.chaidev.chronote.util.ErrorStack
+import be.chaidev.chronote.util.ErrorState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @FlowPreview
 @ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 class TopicBrowserViewModel
 @ViewModelInject
 constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
-    private val topicsRepository: TopicsRepository,
-    private val sharedPreferences: SharedPreferences,
-    private val editor: SharedPreferences.Editor
-) : AbstractViewModel<TopicViewState>() {
+    private val topicRepository: TopicsRepository
+) : ViewModel() {
 
-    override fun handleNewData(data: TopicViewState) {
+    val CLASS_NAME = "MainViewModel"
 
-        data.topicBrowser.let { topicBrowser ->
+    private val dataChannel = ConflatedBroadcastChannel<DataState<TopicViewState>>()
 
-            topicBrowser.topicListData?.let { listData ->
-                setTopicListData(listData)
+    private val _viewState: MutableLiveData<TopicViewState> = MutableLiveData()
+
+    val errorStack = ErrorStack()
+
+    val errorState: LiveData<ErrorState> = errorStack.errorState
+
+    val viewState: LiveData<TopicViewState>
+        get() = _viewState
+
+    init {
+        setupChannel()
+    }
+
+    private fun setupChannel() {
+        dataChannel
+            .asFlow()
+            .onEach { dataState ->
+                dataState.data?.let { data ->
+                    handleNewData(dataState.stateEvent, data)
+                }
+                dataState.error?.let { error ->
+                    handleNewError(dataState.stateEvent, error)
+                }
             }
+            .launchIn(viewModelScope)
+    }
+
+    private fun offerToDataChannel(dataState: DataState<TopicViewState>) {
+        if (!dataChannel.isClosedForSend) {
+            dataChannel.offer(dataState)
         }
+    }
 
-        data.viewTopic.let { viewTopic ->
-
-            viewTopic.topic?.let { topic ->
-                setTopic(topic)
-            }
-        }
-
-        data.updatedTopic.let { updatedBlogFields ->
-            updatedBlogFields.topic?.let { topic ->
-                setTopic(topic)
+    fun setStateEvent(stateEvent: TopicStateEvent) {
+        when (stateEvent) {
+            is LoadTopicsEvent -> {
+                launchJob(
+                    stateEvent,
+                    topicRepository.getTopics(stateEvent)
+                )
             }
         }
     }
 
+    private fun handleNewError(stateEvent: StateEvent, error: ErrorState) {
+        appendErrorState(error)
+        removeJobFromCounter(stateEvent.toString())
+    }
 
-    override fun setStateEvent(stateEvent: StateEvent) {
-        if (!isJobAlreadyActive(stateEvent)) {
 
-            val job: Flow<DataState<TopicViewState>> = when (stateEvent) {
+    fun handleNewData(stateEvent: StateEvent?, data: TopicViewState) {
 
-                is LoadTopicsEvent -> {
-                    topicsRepository.getTopics(
-                        stateEvent = stateEvent
-                    )
+        data.topicBrowser.topicListData?.let { topics ->
+            setTopicListData(topics)
+        }
+
+
+        data.viewTopic.topic?.let { blogPost ->
+            setTopic(blogPost)
+        }
+
+        removeJobFromCounter(stateEvent.toString())
+    }
+
+    private fun launchJob(stateEvent: StateEvent, jobFunction: Flow<DataState<TopicViewState>>) {
+        if (!isJobAlreadyActive(stateEvent.toString())) {
+            addJobToCounter(stateEvent.toString())
+            jobFunction
+                .onEach { dataState ->
+                    offerToDataChannel(dataState)
                 }
-
-                is DeleteTopicEvent -> {
-                    topicsRepository.deleteTopic(stateEvent.topic, stateEvent)
-                }
-
-                is UpdateTopicEvent -> {
-                    topicsRepository.updateTopic(
-                        stateEvent.topic,
-                        stateEvent
-                    )
-                }
-
-                else -> {
-                    flow {
-                        emit(
-                            DataState.error(
-                                response = Response(
-                                    message = INVALID_STATE_EVENT,
-                                    uiComponentType = UIComponentType.None(),
-                                    messageType = MessageType.Error()
-                                ),
-                                stateEvent = stateEvent
-                            )
-                        )
-                    }
-                }
-            }
-            launchJob(stateEvent, job)
+                .launchIn(viewModelScope)
         }
     }
 
-    override fun initNewViewState(): TopicViewState {
-        return TopicViewState()
+    fun setViewState(viewState: TopicViewState) {
+        _viewState.value = viewState
     }
+
+
 }

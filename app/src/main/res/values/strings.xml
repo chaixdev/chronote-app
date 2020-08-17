@@ -29,4 +29,12 @@
     <string name="default_topic_name">a topic name</string>
     <string name="topic_title">The Title of a Topic</string>
     <string name="default_date_modified">Updated on July 23, 2019</string>
+
+
+    <string name="fragment_list">List Fragment</string>
+    <string name="fragment_detail">Detail Fragment</string>
+
+    <string name="there_s_nothing_here">There\'s nothing here!</string>
+
+    <string name="topic_image">Topic image</string>
 </resources>

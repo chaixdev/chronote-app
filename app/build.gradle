@@ -96,6 +96,15 @@ dependencies {
     // Mockk.io
     androidTestImplementation "io.mockk:mockk-android:1.9.2"
 
+    // Espresso
+    def androidx_espresso_core = "3.1.1"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_core"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$androidx_espresso_core"
+
+    def androidx_espresso_idling_resource = "3.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$androidx_espresso_idling_resource"
+    implementation "androidx.test.espresso:espresso-idling-resource:$androidx_espresso_idling_resource"
+
     // -------- LOCAL UNIT TESTS (use JUnit5)
     // JUnit Jupiter
     def junit_jupiter_version = "5.3.2"
@@ -162,5 +171,9 @@ dependencies {
     // Recyclerview
     def recyclerview_version = "1.1.0-beta03"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+
+    def glide_version = "4.9.0"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
 }
