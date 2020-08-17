@@ -1,5 +1,6 @@
 package be.chaidev.chronote.ui.topic.viewmodel
 
+import android.os.Parcelable
 import android.util.Log
 import be.chaidev.chronote.model.Subject
 import be.chaidev.chronote.model.Topic
@@ -215,8 +216,24 @@ fun TopicBrowserViewModel.areAnyJobsActive(): Boolean {
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
+fun TopicBrowserViewModel.getLayoutManagerState(): Parcelable? {
+    val viewState = getCurrentViewStateOrNew()
+    return viewState.topicBrowser.layoutManagerState
+}
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 fun TopicBrowserViewModel.clearLayoutManagerState() {
     val update = getCurrentViewStateOrNew()
     update.topicBrowser.layoutManagerState = null
     setViewState(update)
 }
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.setLayoutManagerState(layoutManagerState: Parcelable) {
+    val update = getCurrentViewStateOrNew()
+    update.topicBrowser.layoutManagerState = layoutManagerState
+    setViewState(update)
+}
+

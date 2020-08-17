@@ -3,21 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/detailFragment">
-    <!--    app:startDestination="@id/listFragment">-->
+    app:startDestination="@id/topicBrowser">
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/listFragment"-->
-    <!--        android:name="be.chaidev.chronote.ui.topic.fragments.TopicBrowserFragment"-->
-    <!--        tools:layout="@layout/fragment_list" >-->
-    <!--        <action-->
-    <!--            android:id="@+id/action_listFragment_to_detailFragment"-->
-    <!--            app:destination="@id/detailFragment"-->
-    <!--            app:popEnterAnim="@anim/slide_in_left"-->
-    <!--            app:popExitAnim="@anim/slide_out_right"-->
-    <!--            app:enterAnim="@anim/slide_in_right"-->
-    <!--            app:exitAnim="@anim/slide_out_left"/>-->
-    <!--    </fragment>-->
+    <fragment
+        android:id="@+id/topicBrowser"
+        android:name="be.chaidev.chronote.ui.topic.fragments.TopicBrowserFragment"
+        tools:layout="@layout/fragment_topic_browser_list">
+        <action
+            android:id="@+id/action_listFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
@@ -25,7 +24,7 @@
         tools:layout="@layout/fragment_detail">
         <action
             android:id="@+id/action_detailFragment_to_finalFragment"
-            app:destination="@id/finalFragment"
+            app:destination="@id/fullscreenFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -33,8 +32,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/finalFragment"
-        android:name="be.chaidev.chronote.ui.topic.fragments.FinalFragment"
+        android:id="@+id/fullscreenFragment"
+        android:name="be.chaidev.chronote.ui.topic.fragments.FullscreenFragment"
         app:enterAnim="@anim/fade_in"
         app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/fade_in"

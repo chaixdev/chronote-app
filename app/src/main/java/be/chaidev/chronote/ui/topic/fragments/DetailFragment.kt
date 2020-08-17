@@ -9,13 +9,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import be.chaidev.chronote.R
+import be.chaidev.chronote.model.Note
+import be.chaidev.chronote.model.Subject
 import be.chaidev.chronote.model.Topic
+import be.chaidev.chronote.model.Type
 import be.chaidev.chronote.ui.mvi.UICommunicationListener
+import be.chaidev.chronote.ui.topic.state.TopicStateEvent
 import be.chaidev.chronote.ui.topic.viewmodel.TopicBrowserViewModel
 import be.chaidev.chronote.util.GlideManager
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import java.time.Instant
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -43,6 +48,12 @@ constructor(
     }
 
     private fun initUI() {
+        viewModel.setStateEvent(TopicStateEvent.LoadTopicsEvent())
+        val topic = Topic(
+            "topicuuid123456", Subject(Type.YOUTUBE, "https://www.youtube.com/watch?v=8ugaeA-nMTc", "Iron Man", 1251000),
+            listOf("movie"), Instant.now(), Instant.now(), listOf(Note("noteId123", "explosion!", 20000))
+        )
+        setTopicView(topic)
         uiCommunicationListener.showStatusBar()
         uiCommunicationListener.expandAppBar()
         uiCommunicationListener.hideCategoriesMenu()

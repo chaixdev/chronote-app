@@ -17,7 +17,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class FinalFragment
+class FullscreenFragment
 constructor(
     private val requestManager: GlideManager
 ) : Fragment(R.layout.fragment_final) {
