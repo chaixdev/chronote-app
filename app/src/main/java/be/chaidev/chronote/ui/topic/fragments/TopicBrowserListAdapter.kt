@@ -65,10 +65,7 @@ class TopicBrowserListAdapter(
         val commitCallback = Runnable {
 
             /*
-                if process died or nav back need to restore layoutmanager AFTER
-                data is set... very annoying.
-                Not sure why I need the delay... Can't figure this out. I've tested with lists
-                100x the size of this one and the 100ms delay works fine.
+               delay needed to buffer
              */
             CoroutineScope(Main).launch {
                 delay(100)
@@ -90,8 +87,9 @@ class TopicBrowserListAdapter(
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
+            val imageUrl = item.subject.getThumbnailUrl()
             requestManager
-                .setImage(item.subject.getThumbnailUrl(), itemView.topic_image)
+                .setImage(imageUrl, itemView.topic_image)
             itemView.topic_tags.text = item.tags.joinToString(";")
             itemView.topic_title.text = item.subject.title
         }

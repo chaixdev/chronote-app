@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.chaidev.chronote.R
 import be.chaidev.chronote.model.Note
 import be.chaidev.chronote.model.Subject
@@ -17,11 +18,14 @@ import be.chaidev.chronote.ui.mvi.UICommunicationListener
 import be.chaidev.chronote.ui.topic.state.TopicStateEvent
 import be.chaidev.chronote.ui.topic.viewmodel.TopicBrowserViewModel
 import be.chaidev.chronote.util.GlideManager
+import be.chaidev.chronote.util.TopSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.time.Instant
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class DetailFragment
@@ -33,11 +37,14 @@ constructor(
 
     lateinit var uiCommunicationListener: UICommunicationListener
 
+    lateinit var noteListAdapter: NoteListAdapter
+
     val viewModel: TopicBrowserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initRecyclerView()
         subscribeObservers()
 
         topic_image.setOnClickListener {
@@ -59,20 +66,32 @@ constructor(
         uiCommunicationListener.hideCategoriesMenu()
     }
 
+    private fun initRecyclerView() {
+        note_recycler.apply {
+            layoutManager = LinearLayoutManager(this@DetailFragment.context)
+            addItemDecoration(TopSpacingItemDecoration(30))
+            noteListAdapter = NoteListAdapter()
+        }
+    }
+
     private fun subscribeObservers() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             if (viewState != null) {
                 viewState.viewTopic.topic?.let { topic ->
                     Log.d(CLASS_NAME, "$topic")
                     setTopicView(topic)
+                    noteListAdapter.apply {
+                        submitList(topic.notes)
+                    }
                 }
             }
         })
     }
 
     private fun setTopicView(topic: Topic) {
+        val imageUrl = topic.subject.getThumbnailUrl()
         requestManager
-            .setImage(topic.subject.getThumbnailUrl(), topic_image)
+            .setImage(imageUrl, topic_image)
         topic_title.text = topic.subject.title
         topic_tags.text = topic.tags.joinToString(";")
         topic_body.text = "notes be here"
@@ -97,8 +116,6 @@ constructor(
             }
         }
     }
-
-
 }
 
 

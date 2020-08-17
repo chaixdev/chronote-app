@@ -9,9 +9,11 @@ import be.chaidev.chronote.ui.topic.fragments.TopicBrowserFragment
 import be.chaidev.chronote.util.Constants
 import be.chaidev.chronote.util.GlideManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
+@FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class MainFragmentFactory @Inject constructor(

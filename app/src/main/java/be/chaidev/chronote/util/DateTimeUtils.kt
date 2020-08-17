@@ -1,5 +1,6 @@
 package be.chaidev.chronote.util
 
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -22,8 +23,12 @@ class DateTimeUtils @Inject constructor() {
             return formatter.format(instant)
         }
 
-        fun getNow():String{
+        fun getNow(): String {
             return DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+        }
+
+        fun readableSeconds(sec: Long): String {
+            return Duration.ofSeconds(sec).toString()
         }
     }
 

@@ -39,7 +39,8 @@ constructor(
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             if (viewState != null) {
                 viewState.viewTopic.topic?.let { topic ->
-                    setImage(topic.subject.getThumbnailUrl())
+                    val imageUrl = topic.subject.getThumbnailUrl()
+                    setImage(imageUrl)
                 }
             }
         })
