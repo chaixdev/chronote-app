@@ -1,6 +1,5 @@
 package be.chaidev.chronote.util
 
-import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -27,10 +26,13 @@ class DateTimeUtils @Inject constructor() {
             return DateTimeFormatter.ISO_INSTANT.format(Instant.now())
         }
 
-        fun readableSeconds(sec: Long): String {
-            return Duration.ofSeconds(sec).toString()
+        fun readableSeconds(milliseconds: Long): String {
+
+            val seconds = (milliseconds / 1000) % 60
+            val minutes = (milliseconds / (1000 * 60) % 60)
+            val hours = (milliseconds / (1000 * 60 * 60) % 24)
+
+            return String.format("%02d:%02d", minutes, seconds)
         }
     }
-
-
 }

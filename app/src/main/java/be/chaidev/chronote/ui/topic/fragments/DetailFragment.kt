@@ -1,6 +1,5 @@
 package be.chaidev.chronote.ui.topic.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -43,7 +42,7 @@ constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setUICommunicationListener(null)
         initRecyclerView()
         subscribeObservers()
 
@@ -71,8 +70,10 @@ constructor(
             layoutManager = LinearLayoutManager(this@DetailFragment.context)
             addItemDecoration(TopSpacingItemDecoration(30))
             noteListAdapter = NoteListAdapter()
+            adapter = noteListAdapter
         }
     }
+
 
     private fun subscribeObservers() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
@@ -93,13 +94,7 @@ constructor(
         requestManager
             .setImage(imageUrl, topic_image)
         topic_title.text = topic.subject.title
-        topic_tags.text = topic.tags.joinToString(";")
-        topic_body.text = "notes be here"
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        setUICommunicationListener(null)
+        topic_tags.text = topic.tags.joinToString(" | ")
     }
 
 

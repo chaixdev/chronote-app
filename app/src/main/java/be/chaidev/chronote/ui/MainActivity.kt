@@ -15,7 +15,6 @@ import be.chaidev.chronote.ui.mvi.UICommunicationListener
 import be.chaidev.chronote.ui.mvi.displayErrorDialog
 import be.chaidev.chronote.ui.topic.state.TopicViewState
 import be.chaidev.chronote.ui.topic.viewmodel.*
-import be.chaidev.chronote.util.Constants
 import be.chaidev.chronote.util.Constants.ERROR_STACK_BUNDLE_KEY
 import be.chaidev.chronote.util.Constants.TOPIC_VIEW_STATE_BUNDLE_KEY
 import be.chaidev.chronote.util.ErrorStack
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity(),
             (inState[TOPIC_VIEW_STATE_BUNDLE_KEY] as TopicViewState?)?.let { viewState ->
                 viewModel.setViewState(viewState)
             }
-            (inState[Constants.ERROR_STACK_BUNDLE_KEY] as ArrayList<ErrorState>?)?.let { stack ->
+            (inState[ERROR_STACK_BUNDLE_KEY] as ArrayList<ErrorState>?)?.let { stack ->
                 val errorStack = ErrorStack()
                 errorStack.addAll(stack)
                 viewModel.setErrorStack(errorStack)
@@ -85,7 +84,6 @@ class MainActivity : AppCompatActivity(),
     private fun subscribeObservers() {
         viewModel.viewState.observe(this, Observer { viewState ->
             if (viewState != null) {
-//                uiCommunicationListener.displayMainProgressBar(viewModel.areAnyJobsActive())
                 displayMainProgressBar(viewModel.areAnyJobsActive())
             }
         })
@@ -162,11 +160,4 @@ class MainActivity : AppCompatActivity(),
             dialog.value.dismiss()
         }
     }
-
-    companion object {
-
-        const val MENU_ITEM_ID_GET_ALL_BLOGS = 99999999
-        const val MENU_ITEM_NAME_GET_ALL_BLOGS = "All"
-    }
-
 }

@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="md_color_button_text">@color/tealDark</item>
     </style>
+
+    <style name="topicListItem">
+        <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
+    </style>
 </resources>
