@@ -70,30 +70,30 @@ constructor(
 
     private fun initData() {
         val viewState = viewModel.getCurrentViewStateOrNew()
+
+        // launch an event to the viewmodel that we want to load topics
         viewModel.setStateEvent(TopicStateEvent.LoadTopicsEvent())
 
     }
 
-    /*
-     I'm creating an observer in this fragment b/c I want more control
-     over it. When a blog is selected I immediately stop observing.
-     Mainly for hiding the menu in DetailFragment.
-     "uiCommunicationListener.hideCategoriesMenu()"
-    */
+
+    /**
+     * this method registers the observers on the LiveData objects that represent the data that UI should bind to. **/
     val observer: Observer<TopicViewState> = Observer { viewState ->
         if (viewState != null) {
 
             viewState.topicBrowser.let { view ->
-                view.topicListData?.let { blogs ->
+                view.topicListData?.let { topics ->
                     listAdapter.apply {
-                        submitList(blogs)
+                        submitList(topics)
                     }
-                    displayTheresNothingHereTV((blogs.size > 0))
+                    displayTheresNothingHereTV((topics.size > 0))
                 }
             }
         }
     }
 
+    // utility function in case there' s an empty list
     private fun displayTheresNothingHereTV(isDataAvailable: Boolean) {
         if (isDataAvailable) {
             no_data_textview.visibility = View.GONE

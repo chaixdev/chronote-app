@@ -12,7 +12,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
-
+/**
+ * custom fragment factory to allow constructor injection in Fragments
+ *
+ * **/
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi

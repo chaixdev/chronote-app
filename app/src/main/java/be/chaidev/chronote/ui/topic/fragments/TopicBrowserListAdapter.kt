@@ -24,6 +24,7 @@ class TopicBrowserListAdapter(
 
     private val CLASS_NAME = "TopicBrowserListAdapter"
 
+
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Topic>() {
 
         override fun areItemsTheSame(oldItem: Topic, newItem: Topic): Boolean {
@@ -35,6 +36,8 @@ class TopicBrowserListAdapter(
         }
 
     }
+
+    // using differ leads to massive performance gains
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
