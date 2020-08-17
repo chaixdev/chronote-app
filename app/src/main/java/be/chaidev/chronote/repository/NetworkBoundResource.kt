@@ -77,7 +77,9 @@ constructor(
 
         val cacheResult = safeCacheCall(dispatcher) { cacheCall.invoke() }
 
-        var jobCompleteMarker: StateEvent? = null
+        var jobCompleteMarker: StateEvent = object : StateEvent {
+            override fun errorInfo(): String = "Something went wrong while fetching from cache"
+        }
         if (markJobComplete) {
             jobCompleteMarker = stateEvent
         }

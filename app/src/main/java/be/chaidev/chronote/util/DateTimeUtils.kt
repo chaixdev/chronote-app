@@ -22,10 +22,17 @@ class DateTimeUtils @Inject constructor() {
             return formatter.format(instant)
         }
 
-        fun getNow():String{
+        fun getNow(): String {
             return DateTimeFormatter.ISO_INSTANT.format(Instant.now())
         }
+
+        fun readableSeconds(milliseconds: Long): String {
+
+            val seconds = (milliseconds / 1000) % 60
+            val minutes = (milliseconds / (1000 * 60) % 60)
+            val hours = (milliseconds / (1000 * 60 * 60) % 24)
+
+            return String.format("%02d:%02d", minutes, seconds)
+        }
     }
-
-
 }

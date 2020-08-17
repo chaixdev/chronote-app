@@ -1,15 +1,33 @@
 package be.chaidev.chronote.ui.topic.viewmodel
 
+import android.os.Parcelable
+import android.util.Log
 import be.chaidev.chronote.model.Subject
 import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.model.Type
+import be.chaidev.chronote.ui.topic.state.TopicViewState
 import be.chaidev.chronote.util.Constants
+import be.chaidev.chronote.util.ErrorStack
+import be.chaidev.chronote.util.ErrorState
+import be.chaidev.chronote.util.EspressoIdlingResource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
 import java.time.Instant
 
 // GETTERS
 
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.getCurrentViewStateOrNew(): TopicViewState {
+    val value = viewState.value?.let {
+        it
+    } ?: TopicViewState()
+    return value
+}
+
+
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getFilter(): String {
     getCurrentViewStateOrNew().let {
@@ -17,6 +35,7 @@ fun TopicBrowserViewModel.getFilter(): String {
     }
 }
 
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getOrder(): String {
@@ -25,6 +44,7 @@ fun TopicBrowserViewModel.getOrder(): String {
     }
 }
 
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getTopic(): Topic {
@@ -35,6 +55,7 @@ fun TopicBrowserViewModel.getTopic(): Topic {
     }
 }
 
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.getDummyTopic(): Topic {
     return Topic(
@@ -49,6 +70,7 @@ fun TopicBrowserViewModel.getDummyTopic(): Topic {
 
 // SETTERS
 
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.setTopicListData(topicList: List<Topic>) {
@@ -57,6 +79,7 @@ fun TopicBrowserViewModel.setTopicListData(topicList: List<Topic>) {
     setViewState(update)
 }
 
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.setTopic(topic: Topic) {
@@ -66,6 +89,7 @@ fun TopicBrowserViewModel.setTopic(topic: Topic) {
 }
 
 // Filter can be on tag
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @FlowPreview
 fun TopicBrowserViewModel.setTopicFilter(tag: String?) {
@@ -78,6 +102,7 @@ fun TopicBrowserViewModel.setTopicFilter(tag: String?) {
 
 // Order can be "-" or ""
 //Note: "-" = DESC, "" = ASC
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.setTopicOrder(order: String) {
@@ -86,6 +111,7 @@ fun TopicBrowserViewModel.setTopicOrder(order: String) {
     setViewState(update)
 }
 
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.removeDeletedTopics() {
@@ -103,17 +129,8 @@ fun TopicBrowserViewModel.removeDeletedTopics() {
 
 }
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-fun TopicBrowserViewModel.setUpdatedTopic(topic: Topic) {
-    val update = getCurrentViewStateOrNew()
-    val updatedTopic = update.updatedTopic
 
-    topic.let { updatedTopic.topic = it }
-    update.updatedTopic = updatedTopic
-    setViewState(update)
-}
-
+@InternalCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun TopicBrowserViewModel.updateListItem(newTopic: Topic) {
@@ -132,10 +149,91 @@ fun TopicBrowserViewModel.updateListItem(newTopic: Topic) {
     }
 }
 
-@FlowPreview
+
 @ExperimentalCoroutinesApi
-fun TopicBrowserViewModel.onTopicUpdateSuccess(topic: Topic) {
-    setUpdatedTopic(topic) // update update Fragment (not really necessary since navigating back)
-    setTopic(topic) // update detail Fragment
-    updateListItem(topic) // update list
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.appendErrorState(errorState: ErrorState) {
+    errorStack.add(errorState)
+    Log.d(CLASS_NAME, "Appending error state. stack size: ${errorStack.size}")
 }
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.clearError(index: Int) {
+    errorStack.removeAt(index)
+}
+
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.setErrorStack(errorStack: ErrorStack) {
+    this.errorStack.addAll(errorStack)
+}
+
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.removeJobFromCounter(stateEventName: String) {
+    val update = getCurrentViewStateOrNew()
+    update.activeJobCounter.remove(stateEventName)
+    setViewState(update)
+    EspressoIdlingResource.decrement()
+}
+
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.isJobAlreadyActive(stateEventName: String): Boolean {
+    val viewState = getCurrentViewStateOrNew()
+    return viewState.activeJobCounter.contains(stateEventName)
+}
+
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.addJobToCounter(stateEventName: String) {
+    val update = getCurrentViewStateOrNew()
+    update.activeJobCounter.add(stateEventName)
+    setViewState(update)
+    EspressoIdlingResource.increment()
+}
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.clearActiveJobCounter() {
+    val update = getCurrentViewStateOrNew()
+    update.activeJobCounter.clear()
+    setViewState(update)
+}
+
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.areAnyJobsActive(): Boolean {
+    val viewState = getCurrentViewStateOrNew()
+    return viewState.activeJobCounter.size > 0
+}
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.getLayoutManagerState(): Parcelable? {
+    val viewState = getCurrentViewStateOrNew()
+    return viewState.topicBrowser.layoutManagerState
+}
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.clearLayoutManagerState() {
+    val update = getCurrentViewStateOrNew()
+    update.topicBrowser.layoutManagerState = null
+    setViewState(update)
+}
+
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun TopicBrowserViewModel.setLayoutManagerState(layoutManagerState: Parcelable) {
+    val update = getCurrentViewStateOrNew()
+    update.topicBrowser.layoutManagerState = layoutManagerState
+    setViewState(update)
+}
+

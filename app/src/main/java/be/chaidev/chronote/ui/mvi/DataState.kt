@@ -1,38 +1,33 @@
 package be.chaidev.chronote.ui.mvi
 
+import be.chaidev.chronote.util.ErrorHandling.Companion.UNKNOWN_ERROR
+import be.chaidev.chronote.util.ErrorState
 
 data class DataState<T>(
-    var stateMessage: StateMessage? = null,
+    var error: ErrorState? = null,
     var data: T? = null,
-    var stateEvent: StateEvent? = null
+    var stateEvent: StateEvent
 ) {
 
     companion object {
 
         fun <T> error(
-            response: Response,
-            stateEvent: StateEvent?
+            errorMessage: String?,
+            stateEvent: StateEvent
         ): DataState<T> {
             return DataState(
-                stateMessage = StateMessage(
-                    response
-                ),
+                error = ErrorState(errorMessage ?: UNKNOWN_ERROR),
                 data = null,
                 stateEvent = stateEvent
             )
         }
 
         fun <T> data(
-            response: Response?,
             data: T? = null,
-            stateEvent: StateEvent?
+            stateEvent: StateEvent
         ): DataState<T> {
             return DataState(
-                stateMessage = response?.let {
-                    StateMessage(
-                        it
-                    )
-                },
+                error = null,
                 data = data,
                 stateEvent = stateEvent
             )

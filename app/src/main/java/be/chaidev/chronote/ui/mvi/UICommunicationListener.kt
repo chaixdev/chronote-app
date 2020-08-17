@@ -1,18 +1,19 @@
 package be.chaidev.chronote.ui.mvi
 
-
 interface UICommunicationListener {
 
-    fun onResponseReceived(
-        response: Response,
-        stateMessageCallback: StateMessageCallback
-    )
+    fun hideCategoriesMenu()
+
+    fun displayMainProgressBar(isLoading: Boolean)
+
+    fun hideToolbar()
+
+    fun showToolbar()
+
+    fun hideStatusBar()
+
+    fun showStatusBar()
 
     fun expandAppBar()
 
-    fun displayProgressBar(isLoading: Boolean)
-
-    fun hideSoftKeyboard()
-
-    fun isStoragePermissionGranted(): Boolean
 }

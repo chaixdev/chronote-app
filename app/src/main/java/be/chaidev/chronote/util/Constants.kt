@@ -16,6 +16,9 @@ object Constants {
 
     const val MESSAGE_STACK_BUNDLE_KEY = "be.chaidev.chronote.ui.mvi.MessageStack"
     const val TOPIC_VIEW_STATE_BUNDLE_KEY = "be.chaidev.chronote.ui.topic.state.TopicViewState"
+    const val ERROR_STACK_BUNDLE_KEY = "be.chaidev.chronote.util.ErrorStack"
+
+
     const val PERMISSIONS_REQUEST_READ_STORAGE: Int = 301
 
 

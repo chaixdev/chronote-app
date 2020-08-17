@@ -7,11 +7,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class TopicViewState(
 
+
+    var activeJobCounter: HashSet<String> = HashSet(),
+
     // state for topic browser
     var topicBrowser: TopicBrowser = TopicBrowser(),
-
-    // state for update topic fragment
-    var updatedTopic: UpdateTopic = UpdateTopic(),
 
     // state for viewTopic fragment
     var viewTopic: ViewTopic = ViewTopic()
@@ -23,7 +23,8 @@ class TopicViewState(
         var topicListData: List<Topic>? = null,
         var isQueryInProgress: Boolean? = null,
         var order: String? = null,
-        var tagFilter: String? = null
+        var tagFilter: String? = null,
+        var layoutManagerState: Parcelable? = null
 
     ) : Parcelable
 
@@ -32,12 +33,5 @@ class TopicViewState(
         var topic: Topic? = null
 
     ) : Parcelable
-
-    @Parcelize
-    class UpdateTopic(
-        var topic: Topic? = null
-
-    ) : Parcelable
-
 
 }

@@ -5,6 +5,7 @@ buildscript {
     ext.fragment_ktx = '1.2.5'
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
     dependencies {
@@ -20,8 +21,9 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         jcenter()
+        mavenCentral()
+        google()
     }
 }
 

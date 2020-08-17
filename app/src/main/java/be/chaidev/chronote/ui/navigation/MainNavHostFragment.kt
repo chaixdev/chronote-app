@@ -6,11 +6,14 @@ import androidx.navigation.fragment.NavHostFragment
 import be.chaidev.chronote.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 @AndroidEntryPoint
 class MainNavHostFragment : NavHostFragment() {
+
 
     @Inject
     lateinit var fragmentFactory: MainFragmentFactory

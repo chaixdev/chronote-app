@@ -3,7 +3,10 @@ package be.chaidev.chronote.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import be.chaidev.chronote.util.GlideManager
+import be.chaidev.chronote.util.GlideRequestManager
 import be.chaidev.chronote.util.SharedPreferenceKeys
+import com.bumptech.glide.Glide
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +28,13 @@ object AppModule {
         return sharedPreferences.edit()
     }
 
+    @Singleton
+    @Provides
+    fun provideGlideRequestManager(
+        application: Application
+    ): GlideManager {
+        return GlideRequestManager(
+            Glide.with(application)
+        )
+    }
 }
