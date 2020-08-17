@@ -1,16 +1,27 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="md_color_button_text">@color/tealDark</item>
+        <item name="chipStyle">@style/Widget.App.Chip</item>
     </style>
 
     <style name="topicListItem">
         <item name="cornerSize">50%</item>
         <item name="cornerFamily">rounded</item>
-        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:colorBackground">@color/tealDark</item>
+    </style>
+
+
+    <style name="Widget.App.Chip" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Chip</item>
+
+    </style>
+
+    <style name="ThemeOverlay.App.Chip" parent="">
+        <item name="colorOnSurface">@color/tealDark</item>
     </style>
 </resources>

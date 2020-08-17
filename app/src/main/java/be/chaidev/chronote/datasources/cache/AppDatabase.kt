@@ -10,7 +10,7 @@ import be.chaidev.chronote.datasources.cache.entity.TopicEntity
 
 @Database(
     entities = arrayOf(TopicEntity::class, NoteEntity::class),
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

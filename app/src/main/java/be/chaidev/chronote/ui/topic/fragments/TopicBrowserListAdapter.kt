@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.chaidev.chronote.R
 import be.chaidev.chronote.model.Topic
 import be.chaidev.chronote.util.GlideManager
+import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.layout_topic_browser_list_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -90,8 +91,16 @@ class TopicBrowserListAdapter(
             val imageUrl = item.subject.getThumbnailUrl()
             requestManager
                 .setImage(imageUrl, itemView.topic_image)
-            itemView.topic_tags.text = item.tags.joinToString(";")
             itemView.topic_title.text = item.subject.title
+            chipGroup.removeAllViews()
+            for (tag in item.tags) {
+                val chipGroup = itemView.chipGroup
+
+                val chip = Chip(context)
+                chip.text = tag
+                chip.isCheckable = false
+                chipGroup.addView(chip)
+            }
         }
     }
 

@@ -2,12 +2,12 @@
 <resources>
     <!-- Main theme colors -->
     <color name="colorPrimary">#fff</color>
-    <color name="colorPrimaryDark">#003193</color>
-    <color name="colorAccent">#20DC75</color>
+    <color name="colorPrimaryDark">#00DEBD</color>
+    <color name="colorAccent">#E0FDB6</color>
 
     <!-- Secondary theme colors -->
-    <color name="tealDark">#0094DE</color>
-    <color name="tealLight">#9FDAF7</color>
+    <color name="tealDark">#00DEBD</color>
+    <color name="tealLight">#E0FDB6</color>
     <color name="link_blue">#003193</color>
 
     <!-- other -->
