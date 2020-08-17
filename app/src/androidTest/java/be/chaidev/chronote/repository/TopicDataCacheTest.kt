@@ -1,7 +1,6 @@
-package be.chaidev.chronote
+package be.chaidev.chronote.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.asLiveData
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import be.chaidev.chronote.datasources.cache.dao.TopicDao
 import be.chaidev.chronote.datasources.cache.entity.NoteEntity
@@ -9,7 +8,8 @@ import be.chaidev.chronote.datasources.cache.entity.TopicEntity
 import be.chaidev.chronote.datasources.cache.entity.TopicWithNotes
 import be.chaidev.chronote.testutil.DbTest
 import be.chaidev.chronote.testutil.TestUtil.createTopic
-import be.chaidev.chronote.testutil.getOrAwaitValue
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -32,15 +32,20 @@ class RoomTest : DbTest() {
 
     @Test
     fun insertTopic() {
+        runBlocking {
+            launch {
+                val topic = createTopic()
 
-        val topic = createTopic()
+                db.topicDao().insertTopic(TopicEntity.fromTopic(topic))
+                db.topicDao().insertNotes(topic.notes.map { note -> NoteEntity.fromNote(note, topic.id) })
 
-        db.topicDao().insertTopic(TopicEntity.fromTopic(topic))
-        db.topicDao().insertNotes(topic.notes.map{note -> NoteEntity.fromNote(note, topic.id) })
+                val withNotes = db.topicDao().getTopicsWithNotes().map(TopicWithNotes::toTopic)
 
-        val withNotes = db.topicDao().getTopicsWithNotes().asLiveData().getOrAwaitValue().map(TopicWithNotes::toTopic)
+                Assert.assertTrue(withNotes[0].id == "uuid1")
+                Assert.assertTrue(withNotes[0].notes.size == 3)
 
-        Assert.assertTrue(withNotes[0].id=="uuid1")
-        Assert.assertTrue(withNotes[0].notes.size==3)
+            }
+        }
+
     }
 }

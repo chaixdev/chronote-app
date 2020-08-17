@@ -1,14 +1,15 @@
 package be.chaidev.chronote.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import be.chaidev.chronote.datasources.network.ApiErrorResponse
-import be.chaidev.chronote.datasources.network.GenericApiResponse
-import be.chaidev.chronote.datasources.network.dto.TopicDto
-import be.chaidev.chronote.datasources.network.retrofit.StreamarksApi
+import be.chaidev.chronote.datasources.api.dto.TopicDto
+import be.chaidev.chronote.datasources.api.retrofit.StreamarksApi
 import be.chaidev.chronote.di.NetworkModule
-import be.chaidev.chronote.testutil.getOrAwaitValue
-import org.junit.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 class TopicsRepositoryTest {
 
@@ -28,15 +29,40 @@ class TopicsRepositoryTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+
     @Test
-    fun test1() {
-        println("test")
-        val topicsLD: LiveData<GenericApiResponse<List<TopicDto>>> = apiService.getTopics()
-        val topics = topicsLD.getOrAwaitValue()
-        Assert.assertTrue(topics.javaClass.name == ApiErrorResponse::class.qualifiedName)
+    fun testDeserialisationThrowsNoExceptions() {
+
+        runBlocking {
+            launch {
+                val topics: List<TopicDto> = apiService.getTopics()
+
+                Assert.assertEquals("size didnt match testJson", topics.size, 11)
+
+
+            }
+        }
     }
 
-    @After
-    fun teardown() {
+
+    @Test
+    fun testMappersToAndFrom() {
+        runBlocking {
+            println("test")
+
+            runBlocking {
+                launch {
+                    val topics: List<TopicDto> = apiService.getTopics()
+                    val dtoToDomainMap = topics.map { topicDto -> topicDto.toTopic() }
+                    val domainToDtoMap = dtoToDomainMap.map { TopicDto.fromTopic(it) }
+
+                    Assert.assertEquals(topics, domainToDtoMap)
+
+
+                }
+            }
+
+
+        }
     }
 }

@@ -1,10 +1,8 @@
 package be.chaidev.chronote.datasource.network
 
-import androidx.lifecycle.LiveData
-import be.chaidev.chronote.datasources.network.GenericApiResponse
-import be.chaidev.chronote.datasources.network.dto.GenericResponse
-import be.chaidev.chronote.datasources.network.dto.TopicDto
-import be.chaidev.chronote.datasources.network.retrofit.StreamarksApi
+import be.chaidev.chronote.datasources.api.dto.GenericResponse
+import be.chaidev.chronote.datasources.api.dto.TopicDto
+import be.chaidev.chronote.datasources.api.retrofit.StreamarksApi
 import be.chaidev.chronote.testutil.FileReader
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -16,8 +14,7 @@ class TestStreamarksApi : StreamarksApi {
     var networkDelay = 0L
 
 
-    override suspend fun getTopics(): GenericApiResponse<List<TopicDto>>>
-    {
+    override suspend fun getTopics(): List<TopicDto> {
         val topicsJsonString: String = FileReader.readStringFromFile(topicsJsonResource)
         val topics = Gson().fromJson<List<TopicDto>>(
             topicsJsonString,
@@ -25,11 +22,17 @@ class TestStreamarksApi : StreamarksApi {
         )
         delay(networkDelay)
 
-        return topics.asLi
+        return topics
+
 
     }
 
-    override fun deleteTopic(id: String): LiveData<GenericApiResponse<GenericResponse>> {
+    override suspend fun deleteTopic(id: String): GenericResponse {
         TODO("Not yet implemented")
     }
+
+    override suspend fun updateTopic(dto: TopicDto): TopicDto {
+        TODO("Not yet implemented")
+    }
+
 }
