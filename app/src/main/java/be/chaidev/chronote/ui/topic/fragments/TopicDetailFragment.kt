@@ -1,62 +1,105 @@
 package be.chaidev.chronote.ui.topic.fragments
 
+//import com.bumptech.glide.RequestManager
+
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import be.chaidev.chronote.R
+import be.chaidev.chronote.model.Note
+import be.chaidev.chronote.model.Subject
+import be.chaidev.chronote.model.Topic
+import be.chaidev.chronote.model.Type
+import be.chaidev.chronote.ui.mvi.StateMessageCallback
+import be.chaidev.chronote.util.Constants.TOPIC_VIEW_STATE_BUNDLE_KEY
+import be.chaidev.chronote.util.DateTimeUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_topic_detail.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import java.time.Instant
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TopicDetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@FlowPreview
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TopicDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class TopicDetailFragment : BaseTopicFragment(R.layout.fragment_topic_detail) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    /**
+     * !IMPORTANT!
+     * Must save ViewState b/c in event of process death the LiveData in ViewModel will be lost
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        val viewState = viewModel.viewState.value
+
+        //clear the list. Don't want to save a large list to bundle.
+        viewState?.topicBrowser?.topicListData = ArrayList()
+
+        outState.putParcelable(
+            TOPIC_VIEW_STATE_BUNDLE_KEY,
+            viewState
+        )
+        super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic_detail, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        subscribeObservers()
+        val topic = Topic(
+            "uuidSW1",
+            Subject(
+                Type.YOUTUBE,
+                "https://www.youtube.com/watch?v=1g3_CFmnU7k",
+                "Star Wars: A New Hope",
+                165000
+            ),
+            listOf("movie"),
+            Instant.now(),
+            Instant.now(),
+            listOf(
+                Note(
+                    "noteId001",
+                    "this is a note",
+                    30000
+                )
+            )
+        )
+        setTopicProperties(topic)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TopicDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TopicDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+
+    fun subscribeObservers() {
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState.viewTopic.topic?.let { topic ->
+                setTopicProperties(topic)
             }
+        })
+
+        viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
+
+            stateMessage?.let {
+                responseHandler.onResponseReceived(
+                    response = it.response,
+                    stateMessageCallback = object : StateMessageCallback {
+                        override fun removeMessageFromStack() {
+                            viewModel.clearStateMessage()
+                        }
+                    }
+                )
+            }
+        })
+    }
+
+
+    fun setTopicProperties(topic: Topic) {
+//        requestManager
+//            .load(blogPost.image)
+//            .into(blog_image)
+        topic_title.text = topic.subject.title
+//        topic_note_count.setText(topic.notes.size)
+        topic_date_modified.text = DateTimeUtils.formatInstant(topic.dateModified)
+        topic_body.text = "sample text"
     }
 }
+

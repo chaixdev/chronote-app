@@ -25,4 +25,8 @@
     <string name="new_topic_description">add a new topic</string>
     <string name="home">Home</string>
     <string name="create">Create</string>
+    <string name="topic_descriptionp">this is a topic description</string>
+    <string name="default_topic_name">a topic name</string>
+    <string name="topic_title">The Title of a Topic</string>
+    <string name="default_date_modified">Updated on July 23, 2019</string>
 </resources>

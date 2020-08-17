@@ -3,32 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/splashFragment">
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="be.chaidev.chronote.ui.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash">
-        <action
-            android:id="@+id/action_splashFragment_to_topicBrowserFragment"
-            app:destination="@id/topicBrowserFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/topicBrowserFragment"
-        android:name="be.chaidev.chronote.ui.topic.fragments.TopicBrowserFragment"
-        android:label="fragment_topic_list"
-        tools:layout="@layout/fragment_topic_browser">
-        <action
-            android:id="@+id/action_topicBrowser_to_topicDetail"
-            app:destination="@id/topicDetailFragment" />
-    </fragment>
+    app:startDestination="@id/topicDetailFragment">
     <fragment
         android:id="@+id/topicDetailFragment"
         android:name="be.chaidev.chronote.ui.topic.fragments.TopicDetailFragment"
         android:label="fragment_topic_detail"
-        tools:layout="@layout/fragment_topic_detail">
-        <action
-            android:id="@+id/action_topicDetail_to_topicBrowser"
-            app:destination="@id/topicBrowserFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_topic_detail"></fragment>
 </navigation>
