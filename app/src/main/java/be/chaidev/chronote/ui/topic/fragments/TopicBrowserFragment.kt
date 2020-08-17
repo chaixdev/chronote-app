@@ -70,9 +70,8 @@ constructor(
 
     private fun initData() {
         val viewState = viewModel.getCurrentViewStateOrNew()
-        if (viewState.viewTopic.topic == null) {
-            viewModel.setStateEvent(TopicStateEvent.LoadTopicsEvent())
-        }
+        viewModel.setStateEvent(TopicStateEvent.LoadTopicsEvent())
+
     }
 
     /*
