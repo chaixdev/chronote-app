@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @FlowPreview
-class TopicsRepositoryImpl
+open class TopicsRepositoryImpl
 @Inject
 constructor(
     val topicsDao: TopicDao,

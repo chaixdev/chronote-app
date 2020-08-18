@@ -14,7 +14,7 @@ import be.chaidev.chronote.util.ErrorState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +32,7 @@ constructor(
 
     val CLASS_NAME = "MainViewModel"
 
-    private val dataChannel = ConflatedBroadcastChannel<DataState<TopicViewState>>()
+    private val dataChannel = BroadcastChannel<DataState<TopicViewState>>(50)
 
     private val _viewState: MutableLiveData<TopicViewState> = MutableLiveData()
 
@@ -67,6 +67,11 @@ constructor(
         }
     }
 
+
+    /**
+     * this is the operation that is called from UI of elsewhere, that raises the event for the other layers to react to.
+     *
+     * **/
     fun setStateEvent(stateEvent: TopicStateEvent) {
         when (stateEvent) {
             is LoadTopicsEvent -> {
@@ -91,13 +96,18 @@ constructor(
         }
 
 
-        data.viewTopic.topic?.let { blogPost ->
-            setTopic(blogPost)
+        data.viewTopic.topic?.let { topic ->
+            setTopic(topic)
         }
 
         removeJobFromCounter(stateEvent.toString())
     }
 
+    /**
+     *
+     * After noticing a StateEvent, launch jobs as coroutine flow. Datachannel keeps track of all the different jobs and updates viewmodel Livedata as they get completed
+     *
+     * **/
     private fun launchJob(stateEvent: StateEvent, jobFunction: Flow<DataState<TopicViewState>>) {
         if (!isJobAlreadyActive(stateEvent.toString())) {
             addJobToCounter(stateEvent.toString())
@@ -109,6 +119,10 @@ constructor(
         }
     }
 
+
+    /**
+     * When a Job completes and setViewState is caledm all subscribers to the viewstate LiveData get notified and can perform the UI update
+     * **/
     fun setViewState(viewState: TopicViewState) {
         _viewState.value = viewState
     }
